@@ -18,8 +18,8 @@ class HelperController extends \App\Core\Controllers\BaseController
     //Function for Curl Get Request
     public function curlGet($path)
     {
-        $this->refreshAccess_token();
         $CollectionData = $this->fatchCollectionData();
+        $this->refreshAccess_token($CollectionData);
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.hubapi.com/' . $path,
@@ -41,8 +41,8 @@ class HelperController extends \App\Core\Controllers\BaseController
     // Fucntion for Curl Delete Request 
     public function curlDelete($path, $delID)
     {
-        $this->refreshAccess_token();
         $CollectionData = $this->fatchCollectionData();
+        $this->refreshAccess_token($CollectionData);
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -63,9 +63,9 @@ class HelperController extends \App\Core\Controllers\BaseController
     public function curlPost($path, $postData)
     {
 
-        $this->refreshAccess_token();
-
         $CollectionData = $this->fatchCollectionData();
+        $this->refreshAccess_token($CollectionData);
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -94,9 +94,9 @@ class HelperController extends \App\Core\Controllers\BaseController
     public function curlPatch($path, $postData)
     {
 
-        $this->refreshAccess_token();
-
         $CollectionData = $this->fatchCollectionData();
+        $this->refreshAccess_token($CollectionData);
+
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -144,10 +144,8 @@ class HelperController extends \App\Core\Controllers\BaseController
         return json_decode($response, true);
     }
 
-    public function isTokenExpire()
+    public function isTokenExpire($CollectionData)
     {
-        $CollectionData = $this->fatchCollectionData();
-        $flagg = count($this->fatchCollectionData());
 
         $object_id = json_decode(json_encode($CollectionData[0]['_id'], true), true)['$oid'];
         $table = new HubSpot_Token();
@@ -166,10 +164,10 @@ class HelperController extends \App\Core\Controllers\BaseController
     }
 
     //functin refresh the token if the token is Expired
-    public function refreshAccess_token()
+    public function refreshAccess_token($CollectionData)
     {
-        if ($this->isTokenExpire() == "Expire") {
-            $CollectionData = $this->fatchCollectionData();
+        if ($this->isTokenExpire($CollectionData) == "Expire") {
+
 
             $refreshToken = $CollectionData[0]['refresh_token'];
 
