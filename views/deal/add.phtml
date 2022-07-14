@@ -1,0 +1,89 @@
+<?php
+echo "<pre>";
+print_r($this->request->getPost());
+echo "</pre>";
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body class="">
+    <h1 class="text-center text-primary">Create Deal</h1>
+
+    <?php
+
+    if (isset($flag)) {
+
+        echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Company Registered</strong> One Company is Sucessfully Registered! Company ID = ' . $flag . '
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+        </div>';
+    }
+    ?>
+
+
+    <div class="container mt-5 mb-5 d-flex justify-content-center">
+        <div class="card px-1 py-4">
+            <form action="" method="POST">
+                <div class="card-body" style="padding: 30px;">
+                    <h6 class="card-title mb-3 text-center">Enter Deal Details</h6>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <!-- <label for="name">Name</label> --> <input class="form-control" type="text" name="dealname" placeholder="Deal Name" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group"> <input class="form-control" type="text" name="amount" placeholder="Deal Amount" required> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group"> <input class="form-control" type="datetime-local" name="closedate" placeholder="Close Date" required> </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group"> <input class="form-control" type="text" name="hubspot_owner_id" placeholder="Hubspot Owner Id" required> </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <div class="input-group"> <input class="form-control" type="text" name="dealstage" placeholder="Deal Stage" required> </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="pipeline" value="default">
+                    
+                    <button class="btn btn-primary btn-block confirm-button">Add Contact</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
+
+</body>
+
+</html>

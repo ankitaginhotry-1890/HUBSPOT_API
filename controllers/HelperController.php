@@ -4,9 +4,6 @@ namespace App\Hubspotremote\Controllers;
 
 use App\Hubspotremote\Models\HubSpot_Token;
 
-use Phalcon\Http\Response;
-
-
 class HelperController extends \App\Core\Controllers\BaseController
 {
 
@@ -19,7 +16,11 @@ class HelperController extends \App\Core\Controllers\BaseController
     public function curlGet($path)
     {
         $CollectionData = $this->fatchCollectionData();
-        $this->refreshAccess_token($CollectionData);
+        $returnData = $this->refreshAccess_token($CollectionData);
+        if ($returnData === "Expire") {
+            $CollectionData = $this->fatchCollectionData();
+        }
+
         $curl = curl_init();
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.hubapi.com/' . $path,
@@ -38,15 +39,18 @@ class HelperController extends \App\Core\Controllers\BaseController
         );
     }
 
-    // Fucntion for Curl Delete Request 
-    public function curlDelete($path, $delID)
+    // Fucntion for Curl Delete Request
+    public function curlDelete($path)
     {
         $CollectionData = $this->fatchCollectionData();
-        $this->refreshAccess_token($CollectionData);
+        $returnData = $this->refreshAccess_token($CollectionData);
+        if ($returnData === "Expire") {
+            $CollectionData = $this->fatchCollectionData();
+        }
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.hubapi.com/' . $path . '/' . $delID,
+            CURLOPT_URL => 'https://api.hubapi.com/' . $path,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_CUSTOMREQUEST => 'DELETE',
             CURLOPT_HTTPHEADER => array(
@@ -64,8 +68,10 @@ class HelperController extends \App\Core\Controllers\BaseController
     {
 
         $CollectionData = $this->fatchCollectionData();
-        $this->refreshAccess_token($CollectionData);
-
+        $returnData = $this->refreshAccess_token($CollectionData);
+        if ($returnData === "Expire") {
+            $CollectionData = $this->fatchCollectionData();
+        }
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
@@ -77,7 +83,7 @@ class HelperController extends \App\Core\Controllers\BaseController
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($postData),
+            CURLOPT_POSTFIELDS => json_encode($postData, true),
             CURLOPT_HTTPHEADER => array(
                 'content-type: application/json',
                 'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
@@ -95,7 +101,10 @@ class HelperController extends \App\Core\Controllers\BaseController
     {
 
         $CollectionData = $this->fatchCollectionData();
-        $this->refreshAccess_token($CollectionData);
+        $returnData = $this->refreshAccess_token($CollectionData);
+        if ($returnData === "Expire") {
+            $CollectionData = $this->fatchCollectionData();
+        }
 
         $curl = curl_init();
 
@@ -117,6 +126,34 @@ class HelperController extends \App\Core\Controllers\BaseController
 
         $response = curl_exec($curl);
         return json_decode($response);
+    }
+
+    //For Put Request curl Fucntion/////////////////////////
+    public function curlPut($path)
+    {
+        $CollectionData = $this->fatchCollectionData();
+        $returnData = $this->refreshAccess_token($CollectionData);
+        if ($returnData === "Expire") {
+            $CollectionData = $this->fatchCollectionData();
+        }
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'https://api.hubapi.com/' . $path,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'PUT',
+            CURLOPT_HTTPHEADER => array(
+                'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        return json_decode($response, true);
     }
 
     //Curl Request for access token when code is recived
@@ -144,6 +181,7 @@ class HelperController extends \App\Core\Controllers\BaseController
         return json_decode($response, true);
     }
 
+
     public function isTokenExpire($CollectionData)
     {
 
@@ -151,7 +189,7 @@ class HelperController extends \App\Core\Controllers\BaseController
         $table = new HubSpot_Token();
         $container = $table->getCollectionForTable(false);
         $dbData = $container->findOne(['_id' => new \MongoDB\BSON\ObjectID($object_id)]);
-        echo "<pre>";
+        // echo "<pre>";
         $expire_time = $dbData['expire_time'];
         date_default_timezone_set('Asia/Kolkata');
         $time = strtotime(date('h:i'));
@@ -194,7 +232,7 @@ class HelperController extends \App\Core\Controllers\BaseController
             date_default_timezone_set('Asia/Kolkata');
             $response = curl_exec($curl);
             $tokendata = json_decode($response, true);
-            echo "<pre>";
+            // echo "<pre>";
             date_default_timezone_set('Asia/Kolkata');
             $time = strtotime(date('h:i'));
             $object_id = json_decode(json_encode($CollectionData[0]['_id'], true), true)['$oid'];
@@ -208,6 +246,8 @@ class HelperController extends \App\Core\Controllers\BaseController
             $table->token_type = $tokendata['token_type'];
             $table->expire_time = date("H:i", strtotime('+30 minutes', $time));
             $table->save();
+
+            return "Expire";
         } else {
             //code if token is valid
 
@@ -217,10 +257,12 @@ class HelperController extends \App\Core\Controllers\BaseController
         }
     }
 
+    //Fucntion to fatch the collection data
     public function fatchCollectionData()
     {
         $table = new HubSpot_Token();
         $container = $table->getCollectionForTable(false);
+
         $dbData = $container->find()->ToArray();
         return $dbData;
     }

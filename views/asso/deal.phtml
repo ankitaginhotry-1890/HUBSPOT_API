@@ -1,0 +1,465 @@
+<?php
+// echo "<pre>";
+// print_r($this->request->getPost());
+// echo "</pre>";
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+</head>
+
+<style>
+    select option {
+        border: 1px solid steelblue;
+        margin-top: 2px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    select option:hover {
+        transition-duration: 0.3s;
+        background-color: steelblue;
+        color: white;
+        letter-spacing: 3px;
+    }
+
+    #buttonSubmit {
+        background-color: steelblue;
+    }
+
+    #buttonSubmit:hover {
+        background-color: transparent;
+        color: black;
+        border-radius: 0px;
+        transform: skew(10px);
+        cursor: cell;
+    }
+
+    .removeAsso:active {
+        background-color: red;
+    }
+    .createAsso:active {
+        background-color: green;
+    }
+</style>
+
+<body>
+    <div class="h1 text-center text-info bg-dark">Deal Association</div>
+    <div class="row">
+        <div class="col">
+            <div class="msg"></div>
+        </div>
+    </div>
+    <form action="" method="post">
+        <div class="row d-flex justify-content-center text-center">
+            <div class="col-6">
+                <select name="Deal_id" class="form-select d-flex justify-content-center text-center dealDetails" data-style="btn-primary" aria-label="Default select example">
+                    <option selected disabled>Select A Deal</option>
+                    <?php echo $data ?>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 options d-flex justify-content-center mt-3">
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12 afterSelectionChooese">
+
+            </div>
+        </div>
+        <div class="row d-flex- justify-content-center">
+            <div class="col-6 afterSelection">
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col d-flex justify-content-center mt-3">
+
+                <button class="btn btn-success Associated" id="buttonSubmit">Association</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+<script>
+    $(document).ready(function() {
+        console.log("working fine");
+        //Global variables & things
+        var dealID;
+        var ContactID;
+        var optionAction = '<div class="form-check">\
+                                <input class="form-check-input createAsso" type="radio" name="flexRadioDefault" id="flexRadioDefault1">\
+                                <label class="form-check-label text-success" for="flexRadioDefault1">\
+                                    Cretae Association\
+                                </label>\
+                                </div>\
+                                <div class="form-check">\
+                                <input class="form-check-input removeAsso" type="radio" name="flexRadioDefault" id="flexRadioDefault2">\
+                                <label class="form-check-label text-danger" for="flexRadioDefault2">\
+                                    Remove Association\
+                                </label>\
+                       </div>';
+
+        var str = ' <div name="contact_id" class="h3 text-center mt-3 headingFont"></div><select class="form-select form-select-sm selectForm" size="10" aria-label="size 10 select example">\
+                            \
+                      </select>';
+
+        $('.dealDetails').click(function(e) {
+            e.preventDefault();
+            dealID = this.value;
+            console.log(dealID);
+            var options = '<div class="btn-group d-flex justify-content-center" role="group" aria-label="Basic outlined example">\
+                                <button type="button" id="contact" class="btn btn-outline-warning">Contact</button>\
+                                <button type="button" id="company" class="btn btn-outline-warning">Company</button>\
+                                <button type="button" id="ticket" class="btn btn-outline-warning">Ticket</button>\
+                                <button type="button" id="lineItems" class="btn btn-outline-warning">Line Items</button>\
+                            </div>';
+            $(".options").html(options);
+        });
+
+        //Contact
+        $(this).on("click", "#contact", function() {
+
+            $('.afterSelectionChooese').html(optionAction);
+
+            //Create  a Association
+            $('.createAsso').click(function(e) {
+                e.preventDefault();
+                $('.Associated').text("Create Association");
+                console.log("Create Association");
+
+
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Contact Email");
+
+                
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/contactDeails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: "data",
+                    success: function(response) {
+                        var jsonContectData = JSON.parse(response);
+                        // console.log(jsonContectData.results);
+                        var ContactStr = '';
+                        for (var i = 0; i < jsonContectData.results.length; i++) {
+                            console.log(jsonContectData.results[i].properties.email);
+                            ContactStr += '<option value=' + jsonContectData.results[i].id + '>' + jsonContectData.results[i].properties.email + '</option>';
+                        }
+
+                        console.log(ContactStr);
+                        $('.selectForm').html(ContactStr);
+                    }
+                });
+
+                $(".selectForm").click(function(e) {
+                    e.preventDefault();
+                    var contactid = $('.selectForm').val();
+                    console.log(contactid);
+                    ContactID = contactid;
+                });
+
+                $(".Associated").click(function(e) {
+                    e.preventDefault();
+                    console.log("Contact ID:" + ContactID);
+                    console.log("Deal ID:" + dealID);
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/createAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deal',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'contacts',
+                            'associatedObjectID': ContactID,
+                            'associationType': 'deal_to_contact'
+                        },
+
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+                            if (typeof jsonResponse.id !== 'undefined') {
+                                console.log("Deal Success Full Associated with an Contact");
+                                var str = '<div class="alert alert-success alert-dismissible fade show" role="alert">\
+                                        <strong>Deal Association</strong> One Contact is Sucessfully Associated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                                $('.msg').html(str);
+                            }
+                        }
+                    });
+                });
+            });
+
+            //Remove a Association
+            $('.removeAsso').click(function(e) {
+                e.preventDefault();
+                //G-vraibale of removeAsso
+                var contact_id = '';
+
+                console.log("remove Association");
+                //Option html printing
+                $('.Associated').text("Remove Association");
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Contact ID");
+
+                //Ajaxx Call for Listing the Content which is assocated with deal
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/getAssociatedIbjectsDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        'primaryObject': 'deal',
+                        'primaryObjectID': dealID,
+                        'toObjectType': 'contacts'
+                    },
+
+                    success: function(response) {
+                        var jsonResponse = JSON.parse(response);
+                        console.log(jsonResponse);
+                        var contactStr2 = "";
+                        // console.log(jsonResponse.results.length);
+                        for (var j = 0; j < jsonResponse.results.length; j++) {
+                            var a = jsonResponse.results[j].id;
+                            console.log(a);
+                            contactStr2 += '<option value=' + a + '>' + a + '</option>';
+                        }
+                        console.log(contactStr2);
+                        $('.selectForm').html(contactStr2);
+                    }
+                });
+
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    contact_id = this.value;
+                });
+                $('.Associated').click(function(e) {
+                    e.preventDefault();
+                    console.log("contact ID :" + contact_id);
+                    console.log("Deal ID :" + dealID);
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/removeAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deal',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'contacts',
+                            'associatedObjectID': contact_id,
+                            'associationType': 'deal_to_contact'
+                        },
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+
+                            console.log("Deal Remove with an conatct");
+                            var str = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\
+                                        <strong>Deal disassociation</strong> One Contact is Sucessfully disassociated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                            $('.msg').html(str);
+                        }
+                    });
+
+                });
+
+            });
+            console.log("contact");
+
+        });
+
+        //Company
+        $(this).on("click", "#company", function() {
+
+            console.log("company");
+            $('.afterSelectionChooese').html(optionAction);
+            console.log();
+            var company_id;
+            var company_name;
+
+            //Create Assocaiton For Company
+            $('.createAsso').click(function(e) {
+                e.preventDefault();
+                console.log("create Assocaition");
+
+
+                //Listing Company
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Company");
+
+                //Ajax Call to get Company Data for listing
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/companyDeatils?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: "data",
+                    success: function(response) {
+                        var jsonContectData = JSON.parse(response);
+                        // console.log(jsonContectData.results);
+                        var ContactStr = '';
+                        for (var i = 0; i < jsonContectData.results.length; i++) {
+                            console.log(jsonContectData.results[i].properties.email);
+                            ContactStr += '<option value=' + jsonContectData.results[i].id + '>' + jsonContectData.results[i].properties.name + '</option>';
+                        }
+
+                        console.log(ContactStr);
+                        $('.selectForm').html(ContactStr);
+                    }
+                });
+
+                //store Company ID 
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    company_id = this.value;
+                    company_name = $('.selectForm').find(":selected").text();
+                });
+
+                //Fire a click event on submit button which is send a ajax call to associate a dela with company
+                $('.Associated').click(function(e) {
+                    e.preventDefault();
+                    console.log("Company ID :" + company_id);
+                    console.log("Company Name :" + company_name);
+                    console.log("Deal ID :" + dealID);
+
+                    //Ajax call to associate a company
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/createAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deal',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'companies',
+                            'associatedObjectID': company_id,
+                            'associationType': 'deal_to_company'
+                        },
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+                            if (typeof jsonResponse.id !== 'undefined') {
+                                console.log("Deal Success Full Associated with an Contact");
+                                var str = '<div class="alert alert-success alert-dismissible fade show" role="alert">\
+                                        <strong>Deal Association : </strong> <strong>' + company_name + '</strong> Comapny is Sucessfully Associated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                                $('.msg').html(str);
+                            }
+                        }
+                    });
+
+                });
+
+                console.log("company id")
+            });
+
+            //Remove Assocaiton For Company
+            $('.removeAsso').click(function(e) {
+                e.preventDefault();
+                // console.log("remove Assocaition")
+                
+                //Listing Company
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Company ID");
+
+                //Ajax Call to get Associated Company Data for listing
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/getAssociatedIbjectsDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        'primaryObject': 'deal',
+                        'primaryObjectID': dealID,
+                        'toObjectType': 'companies'
+                    },
+                    success: function(response) {
+                        var jsonResponse = JSON.parse(response);
+                        console.log(jsonResponse);
+                        var companyStr = "";
+                        console.log(jsonResponse.results.length);
+                        for (var j = 0; j < jsonResponse.results.length; j++) {
+                            var a = jsonResponse.results[j].id;
+                            console.log(a);
+                            companyStr += '<option value=' + a + '>' + a + '</option>';
+                        }
+                        console.log(companyStr);
+                        $('.selectForm').html(companyStr);
+                    }
+                });
+
+                //Store the company id in varibale for future uses
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    company_id = this.value;
+                    console.log(this.value);
+                });
+
+                //Change the button text 
+                $('.Associated').text("Remove Association");
+
+                //Cretae a ajaxx call to remove the association from the associated company
+                $('.Associated').click(function(e) {
+                    e.preventDefault();
+                    console.log("company ID :" + company_id);
+                    console.log("Deal ID :" + dealID);
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/removeAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deal',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'companies',
+                            'associatedObjectID': company_id,
+                            'associationType': 'deal_to_company'
+                        },
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+
+                            console.log("Deal Remove with an conatct");
+                            var str = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\
+                                        <strong>Deal disassociation</strong> One Contact is Sucessfully disassociated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                            $('.msg').html(str);
+                        }
+                    });
+
+                });
+            });
+
+        });
+
+        //Tickets
+        $(this).on("click", "#ticket", function() {
+
+            console.log("ticket");
+
+        });
+
+        //Line items
+        $(this).on("click", "#lineItems", function() {
+
+            console.log("line items");
+        });
+
+    });
+</script>
+
+</html>

@@ -1,0 +1,337 @@
+<?php
+// echo "<pre>";
+// print_r($this->request->getPost());
+// echo "</pre>";
+?>
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+</head>
+
+<style>
+    select option {
+        border: 1px solid steelblue;
+        margin-top: 2px;
+        text-align: center;
+        border-radius: 5px;
+    }
+
+    select option:hover {
+        transition-duration: 0.3s;
+        background-color: steelblue;
+        color: white;
+        /* font-size: 15px; */
+        letter-spacing: 3px;
+    }
+
+
+    #SearchBar:hover {
+        transition-duration: 2s;
+        background: transparent;
+        /* border: 1px solid ; */
+    }
+</style>
+
+<body>
+
+    <div class="display-6 text-primary text-center row"></div>
+    <div class="p-4 mt-5 col-6">
+
+        <select class="form-select" aria-label="Default select example" id="SelectAsso">
+            <option selected disabled>Select Association</option>
+            <option value="ConactToCompany">Contact to Company</option>
+            <option value="ConactToDeal">Contact to Deal</option>
+            <option value="ConactToTicket">Contact to Ticket</option>
+        </select>
+    </div>
+
+
+
+    <form action="" method="post">
+        <div class="row mt-3 mb-3">
+            <div class="col-3 ml-5" id="AssoAction">
+
+            </div>
+        </div>
+        <div class="container-fluid row mt-5" style="background-color: lightsteelblue; padding:3rem">
+
+            <div class="row mt-2 mb-2" style="margin-left: -2rem; border-color:red;">
+                <div id="Conatiner" class="col-6 ml-4"></div>
+            </div>
+
+            <div class="col-6 ContactDeatils">
+                <div class="h3 warning d-flex justify-content-center text-dark" id='leftdetails'></div>
+
+                <div class="d-flex justify-content-center mt-2">
+                    <div class="card" style="width: 28rem;" id="leftsideDetails">
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-6 companyDetails">
+                <div class="h3 warning d-flex justify-content-center text-dark" id='rightdetails'></div>
+                <div class="d-flex justify-content-center" id="rightsideDetails">
+                    <div class="form-check">
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="d-flex justify-content-center mt-5">
+            <button type="submit" class="btn btn-success" id="submitBTN">Associate</button>
+        </div>
+    </form>
+
+</body>
+
+
+<script>
+    //for some ajaxx
+    $(document).ready(function() {
+        console.log("working fine");
+        //Global Variable 
+
+        var ContactDataJson;
+        var contactOption = '<select size="5" class="form-select" multiple aria-label="multiple select example" id="contacAsso"></select>';
+        var companyOption = '<select size="5" class="form-select" multiple aria-label="multiple select example" id="companyAsso"></select>';
+        var NewContactID;
+        var NewCompanyID;
+        var ajaxData;
+        //Common ajax function 
+        function ajaxCall(RequestType, Baseurl, jsondata = 'data') {
+            $.ajax({
+                type: RequestType,
+                async: false,
+                url: Baseurl,
+                data: jsondata,
+                success: function(response) {
+                    ajaxData = response;
+                }
+            });
+            return ajaxData;
+
+        }
+
+        $(this).on('click', '#SelectAsso', function() {
+
+            console.log(this.value);
+
+            if (this.value === "ConactToCompany") {
+
+                console.log("C2C");
+                //Global variables
+                var str = '<div class="input-group">\
+                        <input type="text" class="form-control rounded Cid" placeholder="Enter Contact Name" aria-label="Search" id="SearchBar" aria-describedby="search-addon" />\
+                        </div>';
+
+                var AssociationAction = '<input class="form-check-input createAsso" type="radio" name="AssoAction" value="createAsso" id="flexCheckDefault">\
+                                    <label class="form-check-label" for="flexCheckDefault">\
+                                        Create Association\
+                                    </label><br>\
+                                    <input class="form-check-input removeAsso" type="radio" name="AssoAction" value="removeAsso" id="flexCheckDefault">\
+                                    <label class="form-check-label" for="flexCheckDefault">\
+                                    Remove Association\
+                                    </label>';
+                $("#AssoAction").html(AssociationAction);
+                var selectedAsso = this.value;
+
+
+                //For cretae Association
+                $(".createAsso").click(function(e) {
+                    $("#submitBTN").text("Create Association");
+                    e.preventDefault();
+                    console.log("create");
+                    $('#Conatiner').html(str);
+                    $('#leftdetails').html("Contact Details");
+                    $('#rightdetails').html("Select Company");
+                    $("#leftsideDetails").html(contactOption);
+                    $("#rightsideDetails").html(companyOption);
+
+
+                    //keypress serach bar listing contact
+                    $("#SearchBar").keyup(function() {
+                        var str = "";
+                        for (var i = 0; i < ContactDataJson.results.length; i++) {
+                            if (ContactDataJson.results[i].properties.firstname.match(this.value)) {
+                                str += "<option value=" + ContactDataJson.results[i].id + ">" + ContactDataJson.results[i].properties.firstname + "</option>";
+                            }
+                        }
+                        console.log(str);
+                        $('#contacAsso').html(str);
+
+                    });
+
+                    $("#contacAsso").click(function(e) {
+                        e.preventDefault();
+                        var contactid = $('#contacAsso').val();
+                        console.log(contactid);
+                        NewContactID = contactid;
+
+                    });
+
+                    //for ajaxx call to retrive all the data of user
+                    var response = ajaxCall("post", "https://remote.local.cedcommerce.com/hubspotremote/asso/testing?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", {
+                        'SearchData': this.value
+                    });
+                    ContactDataJson = JSON.parse(response);
+
+
+                    //Note: Replace all the ajax call with ajaxcall method
+                    //listing company
+                    response = ajaxCall("post", "https://remote.local.cedcommerce.com/hubspotremote/asso/companyDeatils?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", "data");
+
+                    jsonCompanyData = JSON.parse(response);
+                    var listingStr = '';
+                    console.log(jsonCompanyData.results[0].id);
+                    for (var i = 0; i < jsonCompanyData.results.length; i++) {
+                        // console.log(jsonCompanyData.results[i]);
+                        listingStr += '\
+                                    <option value=' + jsonCompanyData.results[i].id + '>\
+                                        ' + jsonCompanyData.results[i].properties.name + '\
+                                    </optino>';
+                    }
+                    // console.log(listingStr);
+                    $('#companyAsso').html(listingStr);
+
+                    $("#companyAsso").click(function(e) {
+                        e.preventDefault();
+                        var Companyid = $('#companyAsso').val();
+                        NewCompanyID = Companyid;
+                        console.log(Companyid);
+
+                    });
+
+                    $("#submitBTN").click(function(e) {
+                        e.preventDefault();
+                        console.log("Contact ID :" + NewContactID);
+                        console.log("Company ID :" + NewCompanyID);
+
+                        var response = ajaxCall("post", "https://remote.local.cedcommerce.com/hubspotremote/asso/createAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", {
+                            'primaryObject': 'contacts',
+                            'primaryObjectID': NewContactID[0],
+                            'associatedObjectType': 'companies',
+                            'associatedObjectID': NewCompanyID[0],
+                            'associationType': 'contact_to_company'
+                        });
+                        parseJsonData = JSON.parse(response);
+                        if (parseJsonData.id !== undefined) {
+                            alert("Contact is Successfully Associated with Company");
+                        }
+                        console.log(response);
+
+                    });
+
+                });
+
+
+                //For Remove Association
+                $(".removeAsso").click(function(e) {
+                    e.preventDefault();
+                    console.log("remove");
+
+                    $('#Conatiner').html(str);
+                    $('#leftdetails').html("Contact Details");
+                    $('#rightdetails').html("Select Company");
+                    $("#leftsideDetails").html(contactOption);
+                    $("#rightsideDetails").html(companyOption);
+
+                    //keypress serach bar listing contact
+                    $("#SearchBar").keyup(function() {
+                        var str = "";
+                        for (var i = 0; i < ContactDataJson.results.length; i++) {
+
+
+                            if (ContactDataJson.results[i].properties.firstname.match(this.value)) {
+                                str += "<option value=" + ContactDataJson.results[i].id + ">" + ContactDataJson.results[i].properties.firstname + "</option>";
+                            }
+                        }
+                        console.log(str);
+                        $('#contacAsso').html(str);
+
+                    });
+
+                    //listing asociated conacte id
+                    var response = ajaxCall("post", "https://remote.local.cedcommerce.com/hubspotremote/asso/testing?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", {
+                        'SearchData': this.value
+                    });
+                    var jsonData = JSON.parse(response);
+                    ContactDataJson = jsonData;
+                    console.log(ContactDataJson);
+
+                    //Listing something
+                    $("#contacAsso").click(function(e) {
+                        e.preventDefault();
+                        var contactid = $('#contacAsso').val();
+                        console.log(contactid);
+
+                        var response = ajaxCall("post", "https://remote.local.cedcommerce.com/hubspotremote/asso/getAssociatedIbjectsDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", {
+                            'primaryObject': 'contact',
+                            'primaryObjectID': contactid[0],
+                            'toObjectType': 'companies'
+                        });
+                        var jsonCompanyData = JSON.parse(response);
+                        var listingStr;
+                        for (var i = 0; i < jsonCompanyData.results.length; i++) {
+                            listingStr += '\
+                                    <option value=' + jsonCompanyData.results[i].id + '>\
+                                        ' + jsonCompanyData.results[i].id + '\
+                                    </optino>';
+                        }
+                        $('#companyAsso').html(listingStr);
+
+                    });
+
+                    //Store the Contcat data into global variable
+                    $("#contacAsso").click(function(e) {
+                        e.preventDefault();
+                        var contactid = $('#contacAsso').val();
+                        console.log(contactid);
+                        NewContactID = contactid;
+
+                    });
+
+                    //Store the Company data into global variable
+                    $("#companyAsso").click(function(e) {
+                        e.preventDefault();
+                        var Companyid = $('#companyAsso').val();
+                        NewCompanyID = Companyid;
+                        console.log(Companyid);
+
+                    });
+
+                    $("#submitBTN").click(function(e) {
+                        e.preventDefault();
+                        console.log("Contact ID :" + NewContactID);
+                        console.log("Company ID :" + NewCompanyID);
+
+                        var response = ajaxCall('post', "https://remote.local.cedcommerce.com/hubspotremote/asso/removeAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ", {
+                            'primaryObject': 'contacts',
+                            'primaryObjectID': NewContactID[0],
+                            'associatedObjectType': 'companies',
+                            'associatedObjectID': NewCompanyID[0],
+                            'associationType': 'contact_to_company'
+                        })
+                        
+                        console.log(response);
+                        alert("Assocition Removed Successfully");
+                    });
+
+                });
+            }
+
+        });
+    });
+</script>
+
+</html>
