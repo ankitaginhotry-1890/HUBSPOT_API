@@ -51,7 +51,7 @@ class AssoController extends \App\Core\Controllers\BaseController
     //Function for Listing the Assocaiton between two Objects
     public function getAssociatedIbjectsDetailsAction()
     {
-        if ($this->request->isPost('contact_id')) {
+        if ($this->request->isPost()) {
             $helper = new HelperController();
             $primaryObject = $this->request->getPost('primaryObject');
             $primaryObjectID = $this->request->getPost('primaryObjectID');
@@ -73,12 +73,13 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function dealAction()
     {
         $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/deals?limit=10&archived=false');
+        $dealData = $helper->curlGet('crm/v3/objects/deals?limit=10&archived=false');
         echo "<pre>";
         $HtmlContainstr = "";
-        foreach ($contactData['results'] as $key => $value) {
+        foreach ($dealData['results'] as $key => $value) {
             $HtmlContainstr .= '<option value=' . $value['id'] . '>' . $value['properties']['dealname'] . '</option>';
         }
+        // die(print_r($dealData));
         $this->view->data = $HtmlContainstr;
     }
 
@@ -104,13 +105,6 @@ class AssoController extends \App\Core\Controllers\BaseController
 
     //-------------------------------Fetch Details-->Function()----------------------------------------//
 
-    //contact Details
-    public function contactDeailsAction()
-    {
-        $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/contacts?limit=100&archived=false');
-        return json_encode($contactData, true);
-    }
 
     //One Contact Detail Fetch Fucntion
     public function contactDeatilsAction()
@@ -124,6 +118,14 @@ class AssoController extends \App\Core\Controllers\BaseController
         } else {
             return "data Invalid Please Provide a contact_id";
         }
+    }
+
+    //contact Details
+    public function contactDeailsAction()
+    {
+        $helper = new HelperController();
+        $contactData = $helper->curlGet('crm/v3/objects/contacts?limit=100&archived=false');
+        return json_encode($contactData, true);
     }
 
     //Deal Details
@@ -141,6 +143,33 @@ class AssoController extends \App\Core\Controllers\BaseController
         $ArrayData = $helper->curlGet("crm/v3/objects/companies?limit=100&archived=false");
         return json_encode($ArrayData);
     }
+
+    //Comman Function to fatch Details of An Object
+
+    public function fatchObjectDetailsAction()
+    {
+        if ($this->request->getPost()) {
+            $objectName = $this->request->getPost('ObjectName');
+            $helper = new HelperController();
+            $ArrayData = $helper->curlGet("crm/v3/objects/" . $objectName . "?limit=100&archived=false");
+            return json_encode($ArrayData);
+        }
+    }
+
+    //Line Item Deatils
+    public function listItemDataAction()
+    {
+        $helper = new HelperController();
+        $response = $helper->curlGet("crm/v3/objects/line_items?properties=name%2Chs_product_id%2Cquantity%2Cprice");
+        $html = '';
+        foreach ($response['results'] as $key => $value) {
+            $html .= "
+                <option value=" . $value['id'] . ">" . $value['properties']['name'] . "</option>
+            ";
+        }
+        return $html;
+    }
+
 
     //Filter Search and fetch details
     public function getSpacificContactDataAction($contact_id)

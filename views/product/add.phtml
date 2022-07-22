@@ -1,7 +1,7 @@
 <?php
-// echo "<pre>";
-// print_r($this->request->getPost());
-// echo "</pre>";
+echo "<pre>";
+print_r($this->request->getPost());
+echo "</pre>";
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +15,7 @@
 </head>
 
 <body class="">
-    <h1 class="text-center text-primary">Add Contact</h1>
+    <h1 class="text-center text-primary">Add Product</h1>
 
     <?php
 
@@ -35,39 +35,32 @@
         <div class="card px-1 py-4">
             <form action="" method="POST">
                 <div class="card-body" style="padding: 30px;">
-                    <h6 class="card-title mb-3 text-center">Enter Contact Details</h6>
+                    <h6 class="card-title mb-3 text-center">Enter Product Details</h6>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <!-- <label for="name">Name</label> --> <input class="form-control" type="text" name="firstname" placeholder="Firstname" required>
+                                <!-- <label for="name">Name</label> --> <input class="form-control" type="text" name="name" placeholder="Product Name" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="lastname" placeholder="Lastname" required> </div>
+                                <div class="input-group"> <input class="form-control" type="number" name="price" placeholder="price" required> </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="email" placeholder="Email ID" required> </div>
+                                <div class="input-group"> <input class="form-control" type="number" name="hs_sku" placeholder="SKU ID" required> </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="company" placeholder="Company Name" required> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="number" name="number" placeholder="Phone no" required> </div>
+                            <textarea class="form-control" name="description" id="exampleFormControlTextarea1" rows="3" placeholder="Product Discription"></textarea>
                             </div>
                         </div>
                     </div>

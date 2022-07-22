@@ -67,6 +67,9 @@ class HelperController extends \App\Core\Controllers\BaseController
     public function curlPost($path, $postData)
     {
 
+        // echo "<pre>";
+        //     print_r($postData);
+        //     die;
         $CollectionData = $this->fatchCollectionData();
         $returnData = $this->refreshAccess_token($CollectionData);
         if ($returnData === "Expire") {
@@ -107,9 +110,12 @@ class HelperController extends \App\Core\Controllers\BaseController
         }
 
         $curl = curl_init();
-
+        $CURLOPT_URL = 'https://api.hubapi.com/' . $path;
+        // die($CollectionData[0]['access_token']);
+        // die(json_encode($postData));
         curl_setopt_array($curl, array(
             CURLOPT_URL => 'https://api.hubapi.com/' . $path,
+
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -194,7 +200,7 @@ class HelperController extends \App\Core\Controllers\BaseController
         date_default_timezone_set('Asia/Kolkata');
         $time = strtotime(date('h:i'));
         $current_time = date("H:i");
-        if ($current_time <= $expire_time) {
+        if ($current_time < $expire_time) {
             return "valid"; //not expire
         } else {
             return "Expire"; //expire
@@ -260,10 +266,16 @@ class HelperController extends \App\Core\Controllers\BaseController
     //Fucntion to fatch the collection data
     public function fatchCollectionData()
     {
+
         $table = new HubSpot_Token();
         $container = $table->getCollectionForTable(false);
-
         $dbData = $container->find()->ToArray();
+        // die(print_r($dbData));
         return $dbData;
+        // if (count($dbData) == 0) {
+        //     // echo "<script>alert('HubspotNotConnected Please Connect to the Hubspot')</script>";
+        //     // die;
+        // } else {
+        // }
     }
 }

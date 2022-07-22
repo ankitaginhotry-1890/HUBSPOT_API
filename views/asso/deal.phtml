@@ -45,6 +45,7 @@
     .removeAsso:active {
         background-color: red;
     }
+
     .createAsso:active {
         background-color: green;
     }
@@ -144,11 +145,13 @@
                 $(".afterSelection").html(str);
                 $('.headingFont').text("Select Any Contact Email");
 
-                
+
                 $.ajax({
                     type: "post",
-                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/contactDeails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
-                    data: "data",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/fatchObjectDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        'ObjectName': 'contact',
+                    },
                     success: function(response) {
                         var jsonContectData = JSON.parse(response);
                         // console.log(jsonContectData.results);
@@ -304,8 +307,10 @@
                 //Ajax Call to get Company Data for listing
                 $.ajax({
                     type: "post",
-                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/companyDeatils?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
-                    data: "data",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/fatchObjectDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        'ObjectName': 'company',
+                    },
                     success: function(response) {
                         var jsonContectData = JSON.parse(response);
                         // console.log(jsonContectData.results);
@@ -371,7 +376,7 @@
             $('.removeAsso').click(function(e) {
                 e.preventDefault();
                 // console.log("remove Assocaition")
-                
+
                 //Listing Company
                 $(".afterSelection").html(str);
                 $('.headingFont').text("Select Any Company ID");
@@ -457,7 +462,165 @@
         $(this).on("click", "#lineItems", function() {
 
             console.log("line items");
+            $('.afterSelectionChooese').html(optionAction);
+            var str = ' <div name="contact_id" class="h3 text-center mt-3 headingFont"></div><select class="form-select form-select-sm selectForm" size="10" aria-label="size 10 select example">\
+                            \
+                      </select>';
+            var lineItem_id;
+            //create a Association
+            $('.createAsso').click(function(e) {
+                e.preventDefault();
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Line Item");
+
+                //Ajax Call for getting line items
+                $.ajax({
+                    type: "post", //line_items
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/listItemData?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    success: function(response) {
+                        $('.selectForm').html(response);
+                    }
+                });
+
+                //Store the company id in varibale for future uses
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    lineItem_id = this.value;
+                    console.log(this.value);
+                });
+
+
+
+                //Change the button text 
+                $('.Associated').text("Create Association");
+
+
+                $('.Associated').click(function(e) {
+                    e.preventDefault();
+                    console.log("LineItem ID :" + lineItem_id);
+                    console.log("Deal ID :" + dealID);
+
+                    //Ajax call to associate a company
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/createAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deals',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'line_items',
+                            'associatedObjectID': lineItem_id,
+                            'associationType': 'deal_to_line_item'
+                        },
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+                            if (typeof jsonResponse.id !== 'undefined') {
+                                console.log("Deal Success Full Associated with an Contact");
+                                var str = '<div class="alert alert-success alert-dismissible fade show" role="alert">\
+                                        <strong>Deal Association : </strong> <strong>' + lineItem_id + '</strong> Comapny is Sucessfully Associated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                                $('.msg').html(str);
+                            }
+                        }
+                    });
+
+                });
+
+
+
+
+            });
+
+            //Remove a Association
+            $('.removeAsso').click(function(e) {
+                e.preventDefault();
+                $(".afterSelection").html(str);
+                $('.headingFont').text("Select Any Line Item");
+
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/asso/getAssociatedIbjectsDetails?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        'primaryObject': 'deal',
+                        'primaryObjectID': dealID,
+                        'toObjectType': 'line_items'
+                    },
+                    success: function(response) {
+                        var jsonResponse = JSON.parse(response);
+                        console.log(jsonResponse);
+                        var companyStr = "";
+                        console.log(jsonResponse.results.length);
+                        for (var j = 0; j < jsonResponse.results.length; j++) {
+                            var a = jsonResponse.results[j].id;
+                            console.log(a);
+                            companyStr += '<option value=' + a + '>' + a + '</option>';
+                        }
+                        console.log(companyStr);
+                        $('.selectForm').html(companyStr);
+                    }
+                });
+
+                //Store the company id in varibale for future uses
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    lineItem_id = this.value;
+                    console.log(this.value);
+                });
+
+                //Change the button text 
+                $('.Associated').text("Remove Association");
+
+                //Store the company id in varibale for future uses
+                $('.selectForm').click(function(e) {
+                    e.preventDefault();
+                    company_id = this.value;
+                    console.log(this.value);
+                });
+
+                //Change the button text 
+                $('.Associated').text("Remove Association");
+
+                //Cretae a ajaxx call to remove the association from the associated company
+                $('.Associated').click(function(e) {
+                    e.preventDefault();
+                    console.log("Line ID :" + lineItem_id);
+                    console.log("Deal ID :" + dealID);
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/asso/removeAssociationWithObject?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'primaryObject': 'deal',
+                            'primaryObjectID': dealID,
+                            'associatedObjectType': 'line_items',
+                            'associatedObjectID': lineItem_id,
+                            'associationType': 'deal_to_line_item'
+                        },
+                        success: function(response) {
+
+                            var jsonResponse = JSON.parse(response);
+                            console.log(jsonResponse);
+
+                            console.log("Deal Remove with an conatct");
+                            var str = '<div class="alert alert-danger alert-dismissible fade show" role="alert">\
+                                        <strong>Deal disassociation</strong> One Contact is Sucessfully disassociated with Deal!\
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">\
+                                        <span aria-hidden="true">&times;</span>\
+                                        </button>\
+                                    </div>';
+                            $('.msg').html(str);
+                        }
+                    });
+
+                });
+
+
+            });
         });
+
 
     });
 </script>

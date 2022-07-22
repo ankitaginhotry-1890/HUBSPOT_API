@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listing Page</title>
+</head>
+
+<body>
+    <h1 class="text-center text-lead display-5 text-danger">Custom Object Listing</h1>
+    <div class="row mt-2 mb-2 mt-4">
+        <div class="col d-flex justify-content-center">
+            <button class="btn btn-outline-danger mr-2" id="removeBtn">Remove</button>
+            <?php
+            if (isset($CreateBTN)) {
+                echo $CreateBTN;
+            } else {
+                echo "alert('Data is not avaliable')";
+            }
+            ?>
+        </div>
+    </div>
+    <table class="table  table-striped">
+        <thead>
+            <?php
+            if (isset($TableHead)) {
+                echo $TableHead;
+            } else {
+                echo "alert('Data is not avaliable')";
+            }
+            ?>
+        </thead>
+        <tbody>
+            <?php
+            if (isset($TableBody)) {
+                echo $TableBody;
+            } else {
+                echo "alert('Data is not avaliable')";
+            }
+            ?>
+        </tbody>
+    </table>
+</body>
+
+</html>

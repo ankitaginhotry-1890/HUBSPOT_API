@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+<style>
+    .register {
+        background: -webkit-linear-gradient(left, #3931af, #00c6ff);
+        margin-top: 3%;
+        padding: 3%;
+    }
+
+    .register-left {
+        text-align: center;
+        color: #fff;
+        margin-top: 4%;
+    }
+
+    .register-left input {
+        border: none;
+        border-radius: 1.5rem;
+        padding: 2%;
+        width: 60%;
+        background: #f8f9fa;
+        font-weight: bold;
+        color: #383d41;
+        margin-top: 30%;
+        margin-bottom: 3%;
+        cursor: pointer;
+    }
+
+    .register-right {
+        background: #f8f9fa;
+        border-top-left-radius: 10% 50%;
+        border-bottom-left-radius: 10% 50%;
+    }
+
+    .register-left img {
+        margin-top: 15%;
+        margin-bottom: 5%;
+        width: 25%;
+        -webkit-animation: mover 2s infinite alternate;
+        animation: mover 1s infinite alternate;
+    }
+
+    @-webkit-keyframes mover {
+        0% {
+            transform: translateY(0);
+        }
+
+        100% {
+            transform: translateY(-20px);
+        }
+    }
+
+    @keyframes mover {
+        0% {
+            transform: translateY(0);
+        }
+
+        100% {
+            transform: translateY(-20px);
+        }
+    }
+
+    .register-left p {
+        font-weight: lighter;
+        padding: 12%;
+        margin-top: -9%;
+    }
+
+    .register .register-form {
+        padding: 10%;
+        margin-top: 10%;
+    }
+
+    .btnRegister {
+        float: right;
+        margin-top: 10%;
+        border: none;
+        border-radius: 1.5rem;
+        padding: 2%;
+        background: #0062cc;
+        color: #fff;
+        font-weight: 600;
+        width: 50%;
+        cursor: pointer;
+    }
+
+    .register .nav-tabs {
+        margin-top: 3%;
+        border: none;
+        background: #0062cc;
+        border-radius: 1.5rem;
+        width: 28%;
+        float: right;
+    }
+
+    .register .nav-tabs .nav-link {
+        padding: 2%;
+        height: 34px;
+        font-weight: 600;
+        color: #fff;
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
+    }
+
+    .register .nav-tabs .nav-link:hover {
+        border: none;
+    }
+
+    .register .nav-tabs .nav-link.active {
+        width: 100px;
+        color: #0062cc;
+        border: 2px solid #0062cc;
+        border-top-left-radius: 1.5rem;
+        border-bottom-left-radius: 1.5rem;
+    }
+
+    .register-heading {
+        text-align: center;
+        margin-top: 8%;
+        margin-bottom: -15%;
+        color: #495057;
+    }
+
+    .s-row:hover {
+        transition-duration: 0.5s;
+        transform: scale(1.1);
+    }
+
+    .btnCreate {
+        width: 100%;
+        margin-top: 20px;
+        font-size: 15px;
+    }
+
+    .head:hover {
+        letter-spacing: 5px;
+        transition-duration: 0.2s;
+    }
+</style>
+
+<body>
+    </div>
+
+
+    <div class="row">
+        <div class="col">
+            <div class="container register">
+                <div class="row">
+                    <div class="col-md-3 register-left">
+                        <img src="https://image.ibb.co/n7oTvU/logo_white.png" alt="" />
+                        <h3 class='head'>Welcome</h3>
+                        <p class="head">You are few steps away from Updating your custom object!</p>
+                        <input type="submit" name="" value="Custom Objects" /><br />
+                    </div>
+                    <div class="col-md-9 register-right">
+
+
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                <h3 class="register-heading text-info font-weight-bold head">Update Custom Object</h3>
+                                <form action="" method="post">
+                                    <div class="row register-form">
+
+                                        <!-- required property -->
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="col  d-flex justify-content-right">
+                                                <div class="h6 text-danger">Choose Required Properties</div>
+                                                <div class="requiredPPT mt-5 mr-5 mr-5">
+                                                    <?php
+                                                    if (isset($requriedPPT)) {
+                                                        echo $requriedPPT;
+                                                    } else {
+                                                        echo "<i>Data is not available</i>";
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Searchable property -->
+                                        <div class="row d-flex justify-content-center mt-3">
+                                            <div class="col  d-flex justify-content-right">
+                                                <div class="h6 text-danger">Choose Searchable Properties</div>
+                                                <div class="searchablePPT mt-5 mr-5 mr-5">
+                                                    <?php
+                                                    if (isset($searchablePPT)) {
+                                                        echo $searchablePPT;
+                                                    } else {
+                                                        echo "<i>Data is not available</i>";
+                                                    }
+                                                    ?>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!--  Primary Display property -->
+                                        <div class="row d-flex justify-content-center mt-3">
+                                            <div class="col  d-flex justify-content-right">
+                                                <div class="h6 text-danger">Choose Primary Display Properties</div>
+                                                <div class="displayPPT mt-5 mr-5 mr-5">
+
+
+                                                    <?php
+                                                    if (isset($primaryDisplayPPT)) {
+                                                        echo $primaryDisplayPPT;
+                                                    } else {
+                                                        echo "<i>Data is not available</i>";
+                                                    }
+                                                    ?>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                </form>
+
+                                <div class="row">
+                                    <div class="col d-flex justify-content-center">
+                                        <input type="submit" class="btnUpdate btn btn-outline-success" value="Update" />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    $(document).ready(function() {
+
+        //Global variable
+        var property = {
+            requiredProperties: [],
+            searchableProperties: [],
+            primaryDisplayProperty: ""
+        };
+        $('.btnUpdate').click(function(e) {
+            e.preventDefault();
+
+            console.log("clicked");
+
+            $(".requiredProperties:checked").map(function() {
+                if (property.requiredProperties.includes(this.value)) {} else {
+                    property.requiredProperties.push(this.value);
+                }
+
+            }).get();
+
+            $(".searchableProperties:checked").map(function() {
+                if (property.searchableProperties.includes(this.value)) {} else {
+                    property.searchableProperties.push(this.value);
+                }
+
+            }).get();
+
+            $(".primaryDisplayProperty:checked").map(function() {
+                if (property.primaryDisplayProperty.includes(this.value)) {} else {
+                    property.primaryDisplayProperty = this.value;
+                }
+
+            }).get();
+            console.log($('.EditID').val());
+            console.log((property.RequiredProperty));
+            $.ajax({
+                type: "post",
+                url: "https://remote.local.cedcommerce.com/hubspotremote/custom/update?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                data: {
+                    "data": (property),
+                    "EditID": $('.EditID').val(),
+                },
+                success: function(response) {
+                    console.log("response\n" + response.length);
+                    if (response.length > 300) {
+                        alert("information Updated");
+                    } else {
+                        alert("Something went wrong");
+                    }
+                }
+            });
+
+            console.log(property);
+
+            // console.log(property.RequiredProperty);
+
+        });
+    });
+</script>
+
+</html>

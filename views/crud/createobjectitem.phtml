@@ -1,0 +1,47 @@
+<?php
+// echo "<pre>";
+// print_r($this->request->getPost());
+// echo "</pre>";
+
+// if (isset($flag)) {
+//     // echo "<script>alert('Information Updated Successfully')</script>";
+//     $this->response->redirect('https://remote.local.cedcommerce.com/hubspotremote/deal/list?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ&dealID=9458346917');
+// }
+
+// echo $flag;
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container mt-5 mb-5 d-flex justify-content-center">
+        <div class="card px-1 py-4">
+            <form action="" method="POST">
+                <div class="card-body" style="padding: 30px;">
+                    <h6 class="card-title mb-3 text-center">Create Item</h6>
+                    <?php
+                    if(isset($varification)){
+                        echo "Item Added Successfully";
+                    }
+                    ?>
+
+                    <input type="hidden" name="ObjectTypeID" value=<?php echo $objectType ?>>
+                    <?php echo $data  ?>
+
+                    <button class="btn btn-primary btn-block confirm-button">Save</button>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</body>
+
+</html>
