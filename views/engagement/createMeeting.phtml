@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<style>
+    select {
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: white;
+        outline: none;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    select:hover {
+        transition-duration: 1s;
+        background-color: lightgray;
+        /* color: red; */
+    }
+
+    /* option:hover{
+        transition-duration: 1s;
+        background-color: black;
+        color: white;
+    } */
+
+    option {
+        padding: 10px 20px;
+        background-color: white;
+        outline: none;
+        font-family: "Courier New", Courier, monospace;
+    }
+
+    .inputText {
+        /* background-color: red; */
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        outline: none;
+    }
+
+    body {
+        font-family: sans-serif;
+    }
+</style>
+
+<body>
+    <section class="vh-100 bg-image" style="
+        background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');
+      ">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5 text-info">Create Meeting</h2>
+
+                                <?php
+                                if (isset($msg)) {
+                                    echo "<div class='h5 text-primary'>$msg</div>";
+                                }
+                                ?>
+                                <form method="post">
+                                    <!-- post data is done code the action  -->
+                                    <!-- //Hidden Felids -->
+
+                                    <input type="hidden" name="id" value=<?php echo $_GET['id'] ?>>
+                                    <input type="hidden" name="username" value=<?php echo $_GET['username'] ?>>
+                                    <input type="hidden" name="owner_id" value=<?php echo $_GET['owner_id'] ?>>
+                                    <input type="hidden" name="objectType" value=<?php echo $_GET['objectType'] ?>>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label text-danger" for="form3Example1cg">Title</label>
+                                                <input type="text" id="form3Example1cg" name="title" class="form-control form-control-lg inputText" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1" class="text-danger">Meeting Description</label>
+                                                <textarea class="form-control inputText" id="exampleFormControlTextarea1" name="body" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1" class="text-danger">Notes</label>
+                                                <textarea class="form-control inputText" id="exampleFormControlTextarea1" name="note" rows="2"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label text-danger" for="form3Example1cg">Meeting Url</label>
+                                                <input type="text" id="form3Example1cg" name="meetingURL" class="form-control form-control-lg inputText" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+                                            <div class="form-outline mb-4">
+                                                <div class="form-outline datetimepicker">
+                                                    <label class="form-label text-danger" for="form3Example1cg">Start Time</label>
+                                                    <input type="datetime-local" class="form-control" name="startTime" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col">
+                                            <label class="form-label text-danger" for="form3Example1cg">End Time</label>
+                                            <input type="datetime-local" class="form-control" name="endTime" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center mb-3 mt-4">
+                                            <select class="form-select" aria-label="Default select example" name="outcome">
+                                                <option selected disabled>Select Meeting Outcome</option>
+                                                <option value="NOT_STARTED">SCHEDULED</option>
+                                                <option value="NOT_STARTED">RESCHEDULED</option>
+                                                <option value="COMPLETED">COMPLETED</option>
+                                                <option value="COMPLETED">CANCELED</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center mt-3">
+                                            <button class="btn btn-outline-success btn-block btn-lg gradient-custom-4 text-body mt-4">
+                                                Create
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

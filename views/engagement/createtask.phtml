@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    select {
+        padding: 10px 20px;
+        border-radius: 5px;
+        background-color: white;
+        outline: none;
+        font-family: 'Courier New', Courier, monospace;
+
+    }
+
+    select:hover {
+        transition-duration: 1s;
+        background-color: lightgray;
+        /* color: red; */
+    }
+
+    /* option:hover{
+        transition-duration: 1s;
+        background-color: black;
+        color: white;
+    } */
+
+    option {
+        padding: 10px 20px;
+        background-color: white;
+        outline: none;
+        font-family: 'Courier New', Courier, monospace;
+
+
+    }
+</style>
+
+<body>
+    <section class="vh-100 bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Create Task</h2>
+
+                                <form method="post">
+
+                                <!-- post data is done code the action  -->
+                                <!-- //Hidden Felids -->
+                                    <input type="hidden" name="id" value=<?php echo $_GET['id'] ?>>
+                                    <input type="hidden" name="username" value=<?php echo $_GET['username'] ?>>
+                                    <input type="hidden" name="owner_id" value=<?php echo $_GET['owner_id'] ?>>
+                                    <input type="hidden" name="objectType" value=<?php echo $_GET['objectType'] ?>>
+
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="form-outline mb-4">
+                                                <label class="form-label" for="form3Example1cg">Subject</label>
+                                                <input type="text" id="form3Example1cg" name="subject" class="form-control form-control-lg" />
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col">
+
+                                            <div class="form-group">
+                                                <label for="exampleFormControlTextarea1">Body</label>
+                                                <textarea class="form-control" id="exampleFormControlTextarea1" name="body" rows="5"></textarea>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center mb-3 mt-4">
+
+                                            <select class="form-select" aria-label="Default select example" name='status'>
+                                                <option selected disabled>Select Status</option>
+                                                <option value="COMPLETED">COMPLETED</option>
+                                                <option value="NOT_STARTED">NOT_STARTED</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center mb-3">
+
+                                            <select class="form-select" aria-label="Default select example" name='priority'>
+                                                <option selected disabled>Select Priority</option>
+                                                <option value="LOW">LOW</option>
+                                                <option value="MEDIUM">MEDIUM</option>
+                                                <option value="HIGH">HIGH</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center mt-3">
+                                            <button class="btn btn-outline-success btn-block btn-lg gradient-custom-4 text-body mt-4">Create</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

@@ -116,7 +116,7 @@
         $('.selectObject').click(function(e) {
             e.preventDefault();
             var objectTypeID = $('#optionbar').val();
-            var objectName = $('#optionbar').text();
+            var objectName = $('#optionbar option:selected').text();
             console.log("Object Name\n" + objectName);
             console.log("Object ID\n" + objectTypeID);
             if (objectTypeID !== 'undefined' && objectName !== 'undefined') {

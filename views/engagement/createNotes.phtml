@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        textarea {
+            width: 50rem;
+            height: 20rem;
+            font-size: 1.5em;
+            font-family: sans-serif;
+            border: 1px solid gray;
+            outline: none;
+            background-image: "https://static.vecteezy.com/system/resources/previews/000/153/300/original/vector-grunge-style-note-paper-background.jpg";
+            letter-spacing: 1px;
+            color: lightslategray;
+            padding: 15px;
+            border-top-width: 50px;
+        }
+
+        .header {
+            background-color: lightslategrey;
+            font-size: 30px;
+            padding-left: 20px;
+            font-family: sans-serif;
+            margin-top: 40px;
+            position: absolute;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="text-center text-info display-4">Create Notes</div>
+
+    <!-- <div class="row">
+        <div class="col">
+            <div class="header text-dark">Notes</div>
+        </div>
+    </div> -->
+    <form action="" method="post">
+        <div class="h1"><?php
+                        if (isset($result)) {
+                            echo "Note Created!";
+                        }
+                        ?></div>
+        <input type="hidden" name="id" value=<?php echo $_GET['id'] ?>>
+        <input type="hidden" name="username" value=<?php echo $_GET['username'] ?>>
+        <input type="hidden" name="email" value=<?php echo $_GET['email'] ?>>
+        <input type="hidden" name="owner_id" value=<?php echo $_GET['owner_id'] ?>>
+        <div class="row mt-5">
+            <div class="col d-flex justify-content-center">
+                <textarea class="" id="" rows="10" cols="100" rows="10" placeholder="Start typing your note" name="note"></textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col d-flex justify-content-center">
+                <button class="btn btn-outline-info mt-1 pl-5 pr-5">Save</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>

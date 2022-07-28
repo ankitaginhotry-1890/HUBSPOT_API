@@ -191,4 +191,51 @@ class AssoController extends \App\Core\Controllers\BaseController
         $ArrayData = $helper->curlPost("crm/v3/objects/contacts/search", $jayParsedAry);
         return $ArrayData;
     }
+
+    //-----------------------------------------Custom Object Association---------------------------
+    public function customAssoAction()
+    {
+        if ($this->request->getPost()) {
+            $helper = new HelperController();
+            $response = $helper->curlPost('crm/v3/schemas/' . $this->request->getPost('fromObjectTypeId') . '/associations', $this->request->getPost(), '1b1ebd50-22c2-4174-bb58-ba6ff2f7c95a');
+            return json_encode($response, true);
+        }
+    }
+
+    public function getExistingSchemaDataAction()
+    {
+        if ($this->request->getPost('schemaID')) {
+            $schemaID = $this->request->getPost('schemaID');
+            $helper = new HelperController();
+            $response = $helper->curlGet("crm/v3/schemas/" . $schemaID);
+            return json_encode($response, true);
+        }
+    }
+
+    public function removeAssoCustomObjAction()
+    {
+        if ($this->request->getPost()) {
+
+            $objectTypeID = $this->request->getPost('objectType');
+            $uniqueID = $this->request->getPost('id');
+
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.hubapi.com/crm/v3/schemas/' . $objectTypeID . '/associations/' . $uniqueID . '?hapikey=1b1ebd50-22c2-4174-bb58-ba6ff2f7c95a',
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'DELETE',
+            ));
+
+            $response = curl_exec($curl);
+
+            curl_close($curl);
+            die(print_r($response));
+        }
+    }
 }

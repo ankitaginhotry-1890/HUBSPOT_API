@@ -1,4 +1,4 @@
-<?php 
+<?php
 //  echo $data;
 //  die;
 ?>
@@ -9,43 +9,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-<style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <style>
+        table {
+            /* padding: 10px; */
+            border: 2px solid red;
+            border-collapse: collapse;
+            text-align: center;
 
-    table{
-        /* padding: 10px; */
-        border: 2px solid red;
-        border-collapse:collapse;
-        text-align: center;
-        
-    }  
-    
-    tr:hover{
-        transition-duration: 0.7s;
-        /* background-color: black; */
-        /* color: white; */
-        /* border: 3px solid red; */
-        transform:scale(1.05);
-        border-radius: 2px;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-        
-    }
+        }
 
-    td:hover{
-        transition-duration: 0.7s;
-        /* background-color: black; */
-        /* color: white; */
-        /* border: 3px solid red; */
-        transform:scale(1.1);
-        border-radius: 10px;
-        box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
-        
-    }
-    td{
-        border: 2px solid black;
-    }
+        tr:hover {
+            transition-duration: 0.7s;
+            /* background-color: black; */
+            /* color: white; */
+            /* border: 3px solid red; */
+            transform: scale(1.05);
+            border-radius: 2px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
 
-</style>
+        }
+
+        td:hover {
+            transition-duration: 0.7s;
+            /* background-color: black; */
+            /* color: white; */
+            /* border: 3px solid red; */
+            transform: scale(1.1);
+            border-radius: 10px;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+
+        }
+
+        td {
+            border: 2px solid black;
+        }
+    </style>
 </head>
 
 <body>
@@ -57,10 +56,11 @@
                 <th class="text-info">Company Name</th>
                 <th class="text-info">Create Date</th>
                 <th class="text-info">Actions</th>
+                <th class="text-info">Preview</th>
             </tr>
         </thead>
         <tbody>
-          <?php  echo $data?>
+            <?php echo $data ?>
         </tbody>
     </table>
 </body>

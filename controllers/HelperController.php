@@ -40,7 +40,7 @@ class HelperController extends \App\Core\Controllers\BaseController
     }
 
     // Fucntion for Curl Delete Request
-    public function curlDelete($path)
+    public function curlDelete($path, $hapikey = '')
     {
         $CollectionData = $this->fatchCollectionData();
         $returnData = $this->refreshAccess_token($CollectionData);
@@ -49,22 +49,34 @@ class HelperController extends \App\Core\Controllers\BaseController
         }
         $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.hubapi.com/' . $path,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_CUSTOMREQUEST => 'DELETE',
-            CURLOPT_HTTPHEADER => array(
-                'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
-            ),
-        ));
-        $response = curl_exec($curl);
+        if ($hapikey == '') {
+
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.hubapi.com/' . $path,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CUSTOMREQUEST => 'DELETE',
+                CURLOPT_HTTPHEADER => array(
+                    'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
+                ),
+            ));
+            $response = curl_exec($curl);
+        } else {
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.hubapi.com/' . $path . '/?hapikey=' . $hapikey,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_CUSTOMREQUEST => 'DELETE',
+                CURLOPT_HTTPHEADER => array(),
+            ));
+            $response = curl_exec($curl);
+        }
+
         return json_decode($response, true);
     }
 
     //Function for Curl Post Request
     //path (String)
     //$postData (Array)
-    public function curlPost($path, $postData)
+    public function curlPost($path, $postData, $hapikey = '')
     {
 
         // echo "<pre>";
@@ -72,28 +84,50 @@ class HelperController extends \App\Core\Controllers\BaseController
         //     die;
         $CollectionData = $this->fatchCollectionData();
         $returnData = $this->refreshAccess_token($CollectionData);
+        $curl = curl_init();
         if ($returnData === "Expire") {
             $CollectionData = $this->fatchCollectionData();
         }
-        $curl = curl_init();
 
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'https://api.hubapi.com/' . $path,
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($postData, true),
-            CURLOPT_HTTPHEADER => array(
-                'content-type: application/json',
-                'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
-            ),
-        ));
 
-        $response = curl_exec($curl);
+        if ($hapikey !== "") {
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.hubapi.com/' . $path . '/?hapikey=' . $hapikey,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($postData, true),
+                CURLOPT_HTTPHEADER => array(
+                    'content-type: application/json',
+                ),
+            ));
+
+            $response = curl_exec($curl);
+        } else {
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => 'https://api.hubapi.com/' . $path,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'POST',
+                CURLOPT_POSTFIELDS => json_encode($postData, true),
+                CURLOPT_HTTPHEADER => array(
+                    'content-type: application/json',
+                    'authorization: Bearer ' . $CollectionData[0]['access_token'] . ''
+                ),
+            ));
+
+            $response = curl_exec($curl);
+        }
+
+
         return json_decode($response);
     }
 
