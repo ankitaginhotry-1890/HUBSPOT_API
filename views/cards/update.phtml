@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="h1 text-center">Update Product</div>
+
+    <form action="" method="post">
+        <div class="row mt-5 mb-5">
+            <?php
+            if (isset($msg)) {
+                echo $msg;
+            }
+            ?>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <label class="form-label font-weight-bold text-primary" for="form3Example1cg">Product Name</label>
+                <input type="text" class="form-control form-control-lg" name="name" id="" required>
+            </div>
+            <div class="col-12">
+                <label class="form-label font-weight-bold text-primary" for="form3Example1cg">Product Price</label>
+                <input type="text" class="form-control form-control-lg" name="price" id="" required>
+            </div>
+            <div class="col-12 mt-3  d-flex justify-content-center">
+                <button class="btn btn-outline-success">Update</button>
+            </div>
+        </div>
+    </form>
+</body>
+
+</html>

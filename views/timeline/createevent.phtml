@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .note {
+        text-align: center;
+        height: 80px;
+        background: -webkit-linear-gradient(left, #0072ff, #8811c5);
+        color: #fff;
+        font-weight: bold;
+        line-height: 80px;
+    }
+
+    .form-content {
+        padding: 5%;
+        border: 1px solid #ced4da;
+        margin-bottom: 2%;
+    }
+
+    .form-control {
+        border-radius: 1.5rem;
+    }
+
+    .btnSubmit {
+        border: none;
+        border-radius: 1.5rem;
+        padding: 1%;
+        width: 20%;
+        cursor: pointer;
+        background: #0062cc;
+        color: #fff;
+    }
+</style>
+
+<body>
+    <!-- 
+    <?php
+    // echo $eventTemplateID;
+    ?> -->
+
+
+    <div class="container register-form">
+        <?php
+        if (isset($msg)) {
+            echo "<div class='h2 text-center text-success'>Event Created SuccessFully</div>";
+        }
+
+        ?>
+        <div class="form">
+            <div class="note">
+                <div class="h3 mt-4">Create Event</div>
+            </div>
+            <form action="" method="post">
+                <div class="form-content">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="hidden" name="eventTemplateId" value=<?php echo $eventTemplateID ?>>
+                            <label for=""><b>Choose Record</b></label><br>
+                            <select class="form-select" name="objectID" aria-label="Default select example">
+                                <?php
+                                if (isset($optiondata)) {
+                                    echo $optiondata;
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <?php
+                            if (isset($dynamicFeild)) {
+                                echo $dynamicFeild;
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex justify-content-center mt-3">
+                            <button type="submit" name="createEvent" value="createEvent" class="btnSubmit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

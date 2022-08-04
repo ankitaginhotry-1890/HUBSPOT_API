@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Custom Cards</title>
+    <style>
+        .objectType {
+            font-size: 30px;
+        }
+
+        .overflowPPT {
+            max-height: 25rem;
+            overflow-y: scroll;
+        }
+
+        .pptBox {
+            /* -webkit-box-shadow: 0px 0px 18px 11px rgba(118, 122, 171, 0.58);
+            -moz-box-shadow: 0px 0px 18px 11px rgba(118, 122, 171, 0.58);
+            box-shadow: 0px 0px 18px 11px rgba(118, 122, 171, 0.58); */
+
+            background-color: lightblue;
+            padding-left: 10px;
+            font-size: 15px;
+            line-height: 20px;
+            text-align: left;
+            border-style: groove;
+        }
+    </style>
+</head>
+
+<body class="bg-black">
+    <div class="row">
+        <div class="col">
+            <div class="h1 text-center font-weight-bold text-primary">
+                Create Your Custom Cards
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <section class="bg-image" style="background-image: url('https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp');">
+        <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+            <div class="container h-100">
+                <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col-12 col-md-9 col-lg-7 col-xl-6">
+                        <div class="card" style="border-radius: 15px;">
+                            <div class="card-body p-5">
+                                <h2 class="text-uppercase text-center mb-5">Create an account</h2>
+
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="form3Example1cg" placeholder="Enter a valid URL" class="form-control form-control-lg baseURL" />
+                                </div>
+
+                                <div class="form-outline mb-4">
+                                    <input type="text" id="form3Example1cg" placeholder="Title" class="form-control form-control-lg titlePage" />
+                                </div>
+
+                                <!-- Objects and Properties Listing -->
+                                <label class="form-label font-weight-bold text-primary" for="form3Example1cg">Choose Object and it's Properties</label>
+                                <div class="form-outline mb-4 objects">
+
+                                </div>
+
+
+                                <label class="form-label font-weight-bold text-primary" for="form3Example1cg">Create Display Property</label>
+                                <br>
+                                <button class="btn btn-outline-danger mt-2" id='addProperty'>Add Display Property</button><br>
+                                <div class="displayPPT mt-3"></div>
+                                <hr>
+
+                                <button class="btn btn-outline-danger mt-2" id='addAction'>Add Action URL</button><br>
+                                <div class="displayAction mt-3"></div>
+
+
+                                <div class="d-flex justify-content-center">
+                                    <button type="button" class="btn btn-success btn-block btn-lg gradient-custom-4 text-body createCard">Create</button>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    </div>
+</body>
+
+
+<script>
+    $(document).ready(function() {
+
+
+
+
+        var display = {
+            display: {
+                properties: []
+            }
+        }
+        $.ajax({
+            type: "post",
+            url: "https://remote.local.cedcommerce.com/hubspotremote/crud/getCustomObjectData?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+            success: function(response) {
+                var jsondata = JSON.parse(response);
+                CustomObjectData = jsondata;
+                // console.log(jsondata);
+                var str = ' <!-- Contact checkbox -->\
+                                        <div class="form-check">\
+                                            <input class="form-check-input objectType" type="checkbox" value="contacts" id="flexCheckDefault" />\
+                                            <label class="form-check-label" for="flexCheckDefault">Contacts</label>\
+                                        </div>\
+                                        <div id="propertycontacts" class="overflowPPT pptBox mt-3"></div>\
+                                        <!-- Company checkbox -->\
+                                        <div class="form-check">\
+                                            <input class="form-check-input objectType" type="checkbox" value="companies" id="flexCheckChecked"/>\
+                                            <label class="form-check-label" for="flexCheckChecked">Companies</label>\
+                                        </div>\
+                                        <div id="propertycompanies" class="overflowPPT pptBox mt-3"></div>\
+                                        <!-- Deal checkbox -->\
+                                        <div class="form-check">\
+                                            <input class="form-check-input objectType" type="checkbox" value="deals" id="flexCheckChecked"/>\
+                                            <label class="form-check-label" for="flexCheckChecked">Deals</label>\
+                                        </div>\
+                                        <div id="propertydeals" class="overflowPPT pptBox mt-3"></div>\
+                                        <!-- Ticket checkbox -->\
+                                        <div class="form-check">\
+                                            <input class="form-check-input objectType" type="checkbox" value="tickets" id="flexCheckChecked"/>\
+                                            <label class="form-check-label" for="flexCheckChecked">Tickets</label>\
+                                        </div>\
+                                        <div id="propertytickets" class="overflowPPT pptBox mt-3"></div>';
+                $.each(jsondata, function(indexInArray, valueOfElement) {
+                    //  console.log(valueOfElement);
+                    $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                        // console.log(valueOfElement2.name);
+                        str += '<div class="form-check">\
+                                    <input class="form-check-input objectType" type="checkbox" value="' + valueOfElement2.name + '" id="flexCheckDefault" />\
+                                    <label class="form-check-label" for="flexCheckDefault">' + valueOfElement2.name + '</label>\
+                                </div>\
+                                <div id="property' + valueOfElement2.name + '" class="overflowPPT pptBox mt-3"></div>';
+                    });
+                });
+
+                $('.objects').html(str);
+            }
+
+        });
+
+
+        $(this).on("change", ".objectType input:checkbox:not(:checked)", function(e) {
+            alert('uncheckd' + this.val);
+        });
+
+        $(this).on("click", ".objectType", function(e) {
+
+            // console.log(this.value);
+            var objectName = this.value;
+            // console.log('property' + objectName);
+            if (objectName == 'contacts') {
+                if ($(this).is(":checked")) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/cards/getObjectPPt?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'obejctName': 'contact'
+                        },
+                        success: function(response) {
+                            // console.log(response);
+                            var str = "<div class='h5 text-center text-primary' style='position:sticky;'>Properties</div>";
+                            jsonData = JSON.parse(response);
+                            // console.log(jsonData);
+                            $.each(jsonData, function(indexInArray, valueOfElement) {
+                                $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                                    if (valueOfElement2.name[0] + valueOfElement2.name[1] !== 'hs') {
+                                        // console.log(valueOfElement2.name);
+                                        str += '<div class="form-check">\
+                                    <input class="form-check-input objectTypePPT property2' + objectName + '" type="checkbox" value=' + valueOfElement2.name + ' id="flexCheckChecked"/>\
+                                    <label class="form-check-label" for="flexCheckChecked">' + valueOfElement2.name + '</label>\
+                                    </div>';
+
+                                    }
+                                });
+                            });
+
+                            $('#property' + objectName).html(str);
+                        }
+                    });
+                } else if (!$(this).is(":checked")) {
+                    $('#property' + objectName).empty();
+                }
+            } else if (objectName == 'companies') {
+                // $('#property' + objectName).html("<h1>Hii</h1>");
+                if ($(this).is(":checked")) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/cards/getObjectPPt?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'obejctName': 'comapny'
+                        },
+                        success: function(response) {
+                            // console.log(response);
+                            var str = "<div class='h5 text-center text-primary' style='position:sticky;'>Properties</div>";
+                            jsonData = JSON.parse(response);
+                            // console.log(jsonData);
+                            $.each(jsonData, function(indexInArray, valueOfElement) {
+                                $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                                    if (valueOfElement2.name[0] + valueOfElement2.name[1] !== 'hs') {
+                                        // console.log(valueOfElement2.name);
+                                        str += '<div class="form-check">\
+                                                <input class="form-check-input objectTypePPT property2' + objectName + '" type="checkbox" value=' + valueOfElement2.name + ' id="flexCheckChecked"/>\
+                                                <label class="form-check-label" for="flexCheckChecked">' + valueOfElement2.name + '</label>\
+                                                </div>';
+
+                                    }
+                                });
+                            });
+
+                            $('#property' + objectName).html(str);
+                        }
+                    });
+                } else if (!$(this).is(":checked")) {
+                    $('#property' + objectName).empty();
+                }
+            } else if (objectName == 'deals') {
+                // $('#property' + objectName).html("<h1>Hii</h1>");
+                if ($(this).is(":checked")) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/cards/getObjectPPt?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'obejctName': 'deal'
+                        },
+                        success: function(response) {
+                            // console.log(response);
+                            var str = "<div class='h5 text-center text-primary' style='position:sticky;'>Properties</div>";
+                            jsonData = JSON.parse(response);
+                            // console.log(jsonData);
+                            $.each(jsonData, function(indexInArray, valueOfElement) {
+                                $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                                    if (valueOfElement2.name[0] + valueOfElement2.name[1] !== 'hs') {
+                                        // console.log(valueOfElement2.name);
+                                        str += '<div class="form-check">\
+                                                <input class="form-check-input objectTypePPT property2' + objectName + '" type="checkbox" value=' + valueOfElement2.name + ' id="flexCheckChecked"/>\
+                                                <label class="form-check-label" for="flexCheckChecked">' + valueOfElement2.name + '</label>\
+                                                </div>';
+
+                                    }
+                                });
+                            });
+
+                            $('#property' + objectName).html(str);
+                        }
+                    });
+                } else if (!$(this).is(":checked")) {
+                    $('#property' + objectName).empty();
+                }
+            } else if (objectName == 'tickets') {
+                // $('#property' + objectName).html("<h1>Hii</h1>");
+                if ($(this).is(":checked")) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/cards/getObjectPPt?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'obejctName': 'ticket'
+                        },
+                        success: function(response) {
+                            // console.log(response);
+                            var str = "<div class='h5 text-center text-primary' style='position:sticky;'>Properties</div>";
+                            jsonData = JSON.parse(response);
+                            // console.log(jsonData);
+                            $.each(jsonData, function(indexInArray, valueOfElement) {
+                                $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                                    if (valueOfElement2.name[0] + valueOfElement2.name[1] !== 'hs') {
+                                        // console.log(valueOfElement2.name);
+                                        str += '<div class="form-check">\
+                                                <input class="form-check-input objectTypePPT property2' + objectName + '" type="checkbox" value=' + valueOfElement2.name + ' id="flexCheckChecked"/>\
+                                                <label class="form-check-label" for="flexCheckChecked">' + valueOfElement2.name + '</label>\
+                                                </div>';
+
+                                    }
+                                });
+                            });
+
+                            $('#property' + objectName).html(str);
+                        }
+                    });
+                } else if (!$(this).is(":checked")) {
+                    $('#property' + objectName).empty();
+                }
+            } else {
+                // $('#property' + objectName).html("<h1>Hii</h1>");
+                if ($(this).is(":checked")) {
+
+                    $.ajax({
+                        type: "post",
+                        url: "https://remote.local.cedcommerce.com/hubspotremote/cards/getObjectPPt?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                        data: {
+                            'obejctName': objectName
+                        },
+                        success: function(response) {
+                            // console.log(response);
+                            var str = "<div class='h5 text-center text-primary' style='position:sticky;'>Properties</div>";
+                            jsonData = JSON.parse(response);
+                            // console.log(jsonData);
+                            $.each(jsonData, function(indexInArray, valueOfElement) {
+                                $.each(valueOfElement, function(indexInArray2, valueOfElement2) {
+                                    if (valueOfElement2.name[0] + valueOfElement2.name[1] !== 'hs') {
+                                        // console.log(valueOfElement2.name);
+                                        str += '<div class="form-check">\
+                                                <input class="form-check-input objectTypePPT" type="checkbox property2' + objectName + '" value=' + valueOfElement2.name + ' id="flexCheckChecked"/>\
+                                                <label class="form-check-label" for="flexCheckChecked">' + valueOfElement2.name + '</label>\
+                                                </div>';
+
+                                    }
+                                });
+                            });
+
+                            $('#property' + objectName).html(str);
+                        }
+                    });
+                } else if (!$(this).is(":checked")) {
+                    $('#property' + objectName).empty();
+                }
+            }
+
+        });
+
+
+        //********************Display PPT************************
+        var ppt = "<div class='row mt-3 s-row d-flex justify-content-center'>\
+                        <div class='col' class='propertyName'>\
+                            <input type='text' id='form12' class='form-control pptName' placeholder='Name'/>\
+                        </div>\
+                        <div class='col' class='labelName'>\
+                            <input type='text' id='form12' class='form-control pptlabel' placeholder='Label' />\
+                        </div>\
+                        <div class='col mt-2' class='propertyType'>\
+                            <select class='form-select pptType' aria-label='Default select example'>\
+                                <option selected disabled>Type</option>\
+                                <option value='STRING'>Currency</option>\
+                                <option value='STRING'>Date</option>\
+                                <option value='STRING'>Datetime</option>\
+                                <option value='STRING'>Numberic</option>\
+                                <option value='STRING'>Email</option>\
+                                <option value='STRING'>Numberic</option>\
+                                <option value='STRING'>String</option>\
+                                <option value='STRING'>Status</option>\
+                            </select>\
+                        </div>\
+                        <div class='col-3'>\
+                           <button class='btn btn-outline-danger delPPT' value='XX'>X Delete</button>\
+                        </div>\
+                    </div>";
+
+        $('#addProperty').click(function(e) {
+            e.preventDefault();
+            $('.displayPPT').append(ppt);
+        });
+
+        $(this).on("click", ".delPPT", function() {
+            console.log("sad");
+            $(this).parent().parent().remove();
+        });
+
+        $('#addAction').click(function(e) {
+            e.preventDefault();
+            var textBox = ' <div class="form-outline mb-4 row">\
+                                    <div class="col-9">\
+                                    <input type="text" id="form3Example1cg" placeholder="Enter a valid URL" class="form-control form-control-lg actionURLS" />\
+                                    </div>\
+                                    <div class="col-3 mt-1">\
+                                    <button class="btn btn-outline-danger delAction">X</button>\
+                                    </div>\
+                                </div>';
+
+            $('.displayAction').append(textBox);
+        });
+        $(this).on("click", ".delAction", function() {
+            $(this).parent().parent().remove();
+        });
+
+
+        $(".createCard").click(function(e) {
+            e.preventDefault();
+            var fetch = {
+                fetch: {
+                    objectTypes: [],
+                    targetUrl: ""
+                },
+
+            };
+            var propertiesToSend = [];
+            var pptName = [];
+            var pptLabel = [];
+            var pptType = [];
+            var display = {
+                display: {
+                    properties: []
+                }
+            };
+
+            var action = {
+                actions: {
+                    baseUrls: []
+                }
+            };
+
+            // Save ObjectType Data
+            $(".objectType:checked").map(function() {
+                var ppt = ".property2" + this.value + ":checked";
+                $(ppt).map(function() {
+                    propertiesToSend.push(this.value);
+                }).get();
+                // fetch.fetch.objectTypes.objectType
+                fetch.fetch.objectTypes.push({
+                    name: this.value,
+                    propertiesToSend
+                });
+                propertiesToSend = [];
+            }).get();
+
+            //Save Target URL
+            fetch.fetch.targetUrl = $(".baseURL").val();
+
+            //Save Display Properties
+            $(".pptName").map(function() {
+                // var ppt = ".property2" + this.value + ":checked";
+                // console.log(this.value);
+                pptName.push(this.value);
+
+            }).get();
+            $(".pptlabel").map(function() {
+                // var ppt = ".property2" + this.value + ":checked";
+                // console.log(this.value);
+                pptLabel.push(this.value);
+
+
+            }).get();
+            $(".pptType option:selected").map(function() {
+                pptType.push(this.value);
+                // console.log(this.value);
+
+            }).get();
+
+            for (var i = 0; i < pptName.length; i++) {
+                display.display.properties.push({
+                    "dataType": pptType[i],
+                    "name": pptName[i],
+                    "label": pptLabel[i]
+                });
+            }
+
+            //Save action Base Urls
+            $(".pptType option:selected").map(function() {
+                pptType.push(this.value);
+                // console.log(this.value);
+
+            }).get();
+
+            $(".actionURLS").map(function() {
+                // console.log(this.value);
+                action.actions.baseUrls.push(this.value);
+            }).get();
+
+            // console.log(pptName, pptLabel, pptType);
+            // console.log(fetch);
+            // console.log(display);
+            // console.log(action);
+
+            var finalJSONdata = {
+                "fetch": fetch.fetch,
+                "display": display.display,
+                "title": $(".titlePage").val(),
+                "actions": action.actions,
+            };
+
+            console.log(finalJSONdata);
+
+            $.ajax({
+                type: "post",
+                url: "https://remote.local.cedcommerce.com/hubspotremote/cards/createCard?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ&username=kajal%20jaiswal&email=kajaljaiswal123@gmail.com&user_id=2501&objectType=contact",
+                data: {
+                    "postdata": finalJSONdata,
+                    "appID": 391294
+                },
+                success: function(response) {
+                    // console.log(response);
+                    var jsonData = JSON.parse();
+
+                    if (jsonData.title !== undefined) {
+                        alert("Card Created");
+                    }
+                }
+            });
+
+        });
+    });
+</script>
+
+</html>
