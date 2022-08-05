@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    /* Custom Select wrapper */
+    .select {
+        position: relative;
+        display: flex;
+        width: 13em;
+        height: 3em;
+        border-radius: .25em;
+        overflow: hidden;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 47px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: red;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2.5px;
+        right: 2.5px;
+        top: 1.5px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: green;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>
+
+<body>
+    <section class="h-100 bg-dark">
+        <div class="container py-5 h-100">
+            <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col">
+                    <div class="card card-registration my-4">
+                        <div class="row g-0">
+                            <div class="col-xl-6 d-none d-xl-block">
+                                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/img4.webp" alt="Sample photo" class="img-fluid" style="border-top-left-radius: .25rem; border-bottom-left-radius: .25rem;" />
+                            </div>
+                            <div class="col-xl-6">
+                                <div class="card-body p-md-5 text-black">
+                                    <h3 class="mb-5 text-uppercase text-center">Create Subscription</h3>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-4">
+
+                                            <select class="select selectOBJ">
+                                                <option value="1" disabled selected>Choose Object</option>
+                                                <option value="contact">Contact</option>
+                                                <option value="company">Company</option>
+                                                <option value="deal">Deal</option>
+                                                <option value="ticket">Tickets</option>
+                                                <option value="product">Product</option>
+                                                <option value="line_item">line_item</option>
+                                                <option value="conversation">Conversation</option>
+                                            </select>
+
+                                        </div>
+                                        <div class="col-md-6 mb-4">
+
+                                            <select class="select selectPPT">
+                                                <option value="1" disabled selected>Choose Property</option>
+                                                <option value="propertyChange">propertyChange</option>
+                                                <option value="creation">creation</option>
+                                                <option value="deletion">deletion</option>
+                                                <option value="privacyDeletion">privacyDeletion</option>
+                                                <option value="newMessage">newMessage</option>
+                                            </select>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="form-outline mb-4 pptChange">
+
+                                    </div>
+
+                                    <div class="form-outline mb-4">
+                                        <label for="">Active</label>
+                                        <label class="switch">
+                                            <input type="checkbox" class="checkState">
+                                            <span class="slider round"></span>
+                                        </label>
+                                        <label for="">inActive</label>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col d-flex justify-content-center">
+                                            <button class="btn btn-outline-success createSub">Create Subscription</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    checkState
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+<script>
+    $(document).ready(function() {
+
+        $(".selectOBJ").click(function(e) {
+            e.preventDefault();
+            console.log(this.value);
+
+            var options = '<option value="propertyChange">propertyChange</option>\
+                            <option value="creation">creation</option>\
+                            <option value="deletion">deletion</option>\
+                            <option value="privacyDeletion">privacyDeletion</option>\
+                            <option value="newMessage">newMessage</option>';
+
+
+            if (this.value == "deal" || this.value == "company") {
+
+                var options = '<option selected disabled>Choose Property</option>\
+                            <option value="creation">creation</option>\
+                            <option value="deletion">deletion</option>\
+                            <option value="propertyChange">propertyChange</option>';
+                $(".selectPPT").html(options);
+            } else if (this.value == "contact") {
+                var options = '<option selected disabled>Choose Property</option>\
+                            <option value="creation">creation</option>\
+                            <option value="deletion">deletion</option>\
+                            <option value="propertyChange">propertyChange</option>\
+                            <option value="privacyDeletion">privacyDeletion</option';
+                $(".selectPPT").html(options);
+
+            } else {
+                $(".selectPPT").html(options);
+
+            }
+        });
+
+        $(".selectPPT").click(function(e) {
+            e.preventDefault();
+            var pptChange = '<input type="text" id="form3Example9" class="form-control form-control-lg pptName" />\
+            <label class="form-label" for="form3Example9">Enter Property Name</label>';
+            if (this.value == "propertyChange") {
+                $(".pptChange").html(pptChange);
+                console.log("e");
+
+            } else {
+                $(".pptChange").children().remove();
+            }
+        });
+
+        $(".createSub").click(function(e) {
+            e.preventDefault();
+
+            var eventType = $(".selectOBJ").val() + "." + $(".selectPPT").val();;
+            var propertyName = $(".pptName").val();
+            var status = "";
+
+            if ($('.checkState').is(':checked')) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+
+            if (propertyName !== undefined) {
+                console.log(eventType);
+                console.log(propertyName);
+                console.log(status);
+
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/webhook/createSubscription?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        "active": status,
+                        "eventType": eventType,
+                        "propertyName": propertyName
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+                // $(selector).val();
+            } else {
+                console.log(eventType);
+                console.log(status);
+                $.ajax({
+                    type: "post",
+                    url: "https://remote.local.cedcommerce.com/hubspotremote/webhook/createSubscription?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                    data: {
+                        "active": status,
+                        "eventType": eventType,
+                    },
+                    success: function(response) {
+                        console.log(response);
+                    }
+                });
+            }
+
+
+
+        });
+
+
+    });
+</script>
+
+</html>

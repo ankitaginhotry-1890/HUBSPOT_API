@@ -139,7 +139,6 @@ class TimelineController extends \App\Core\Controllers\BaseController
             }
 
             $this->view->dynamicFeild = $html;
-            // die;
         }
 
 

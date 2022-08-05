@@ -155,16 +155,16 @@ class HelperController extends \App\Core\Controllers\BaseController
         if ($returnData === "Expire") {
             $CollectionData = $this->fatchCollectionData();
         }
-
+        
         $curl = curl_init();
         // $CURLOPT_URL = 'https://api.hubapi.com/' . $path;
         // // die($CollectionData[0]['access_token']);
         // // die(json_encode($postData));
-
+        
         if ($hapikey !== "") {
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.hubapi.com/' . $path . "/?hapikey=" . $hapikey,
-
+                
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -180,7 +180,7 @@ class HelperController extends \App\Core\Controllers\BaseController
         } else {
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.hubapi.com/' . $path,
-
+                
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -195,8 +195,8 @@ class HelperController extends \App\Core\Controllers\BaseController
                 ),
             ));
         }
-
-
+        
+        
         $response = curl_exec($curl);
         return json_decode($response);
     }

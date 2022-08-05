@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Blog Home - Start Bootstrap Template</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="css/styles.css" rel="stylesheet" />
+</head>
+
+<style>
+    body {
+        font-family: sans-serif;
+    }
+
+    #textbox {
+        padding: 10px 20px;
+        height: 3rem;
+        margin-top: -5px;
+        font-size: 15px;
+    }
+
+    select {
+        /* height: 100px; */
+        padding: 10px 20px;
+        margin-top: -3px;
+        background: lightsteelblue;
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        border-radius: 5px;
+    }
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 47px;
+        height: 20px;
+    }
+
+    .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: red;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 16px;
+        width: 16px;
+        left: 2.5px;
+        right: 2.5px;
+        top: 1.5px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked+.slider {
+        background-color: green;
+    }
+
+    input:focus+.slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked+.slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
+</style>
+
+<body>
+    <!-- Responsive navbar-->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#!">Start Bootstrap</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <!-- <div class="container">
+            <div class="text-center mt-3 mb-3">
+                <h1 class="fw-bolder">Welcome to Blog Home!</h1>
+            </div>
+        </div> -->
+    <!-- Page content-->
+    <div class="container mt-3">
+        <div class="row">
+            <!-- Blog entries-->
+            <div class="col-lg-10">
+                <button class="btn btn-outline-info" style="float:right"><a href="https://remote.local.cedcommerce.com/hubspotremote/webhook/createSubscription?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ">Create Subscription</a> </button>
+                <form action="" method="post">
+                    <div class="h2 mt-3">Webhooks</div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="h5 mt-4">Target Url</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-2">
+                                    <div class="h5 mt-3 ml-3">http://</div>
+                                </div>
+                                <div class="col-6 mt-2" style="margin-left:-3rem">
+                                    <input type="url" name="targetUrl" value=<?php echo $targetUrl ?> id="textbox" class="form-control">
+                                </div>
+                                <div class="col-2 mt-2" style="margin-left:-1rem">
+                                    <input type="number" name="maxConcurrentRequests" placeholder="Throttling" id="textbox" class="form-control">
+                                </div>
+                                <div class="col-3 mt-2" style="margin-left:-1.5rem">
+                                    <select class="form-select" name="period" aria-label="Default select example">
+                                        <option value="SECONDLY">per second</option>
+                                        <option value="ROLLING_MINUTE">per minute</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-8">
+                                    <div class="p opacity-100" style="margin-left:7rem; font-size:13px;color:lightsteelblue">HubSpot will send a JSON payload to this URL with details about events when they trigger.</div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="p opacity-100" style="margin-left:5rem; font-size:13px;color:lightsteelblue">Maximum number of requests HubSpot will try sending. Requests can contain up to 100 events.</div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="p opacity-50 text-lead" style="margin-left:7rem; font-size:13px;"><a href="https://developers.hubspot.com/docs/api/webhooks">Learn more about the Webhooks API</a></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-center">
+                            <input type="submit" value="Save" class="btn btn-outline-success">
+                        </div>
+                    </div>
+                </form>
+                <div id="editEmployeeModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Employee</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>Name</label>
+                                    <input type="text" class="form-control name12" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Header Template</label>
+                                    <input type="email" class="form-control headerTemplate12" required>
+                                </div>
+                                <div class="form-group mt-5">
+                                    <label>Object Type</label>
+                                    <select class="ml-3 form-select objectType3" aria-label="Default select example">
+                                        <option value="contacts">Contacts</option>
+                                        <option value="companies">Companies</option>
+                                        <option value="deals">Deals</option>
+                                        <option value="tickets">Tickets</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Token</label>
+                                    <button class="btn btn-outline-danger mt-2" style="margin-left:45px" id='addProperty2'>Add Display Property</button><br>
+                                    <div class="displayPPT2"></div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-info" id="updateBtn" value="Save">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div class="row mt-5">
+            <div class="col">
+                <div class="h3">
+                    Event subscriptions
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <table class="table  table-striped">
+                    <thead>
+                        <tr>
+
+                            <th class="text-info">OBJECT TYPE</th>
+                            <th class="text-info">SUBSCRIPTIONS</th>
+                            <th class="text-info">Status</th>
+                            <th class="text-info">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php
+                        if (isset($tableData)) {
+                            echo $tableData;
+                        }
+                        ?>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+<script>
+    $(".checkState").click(function(e) {
+        console.log("working");
+        var id = $(this).val();
+        console.log(id);
+        if (this.checked) {
+            console.log("checked");
+            $.ajax({
+                //updateStatus
+                type: "post",
+                url: "https://remote.local.cedcommerce.com/hubspotremote/webhook/updateStatus?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                data: {
+                    "id": id,
+                    "status": true
+                },
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+
+
+        } else {
+            console.log("UNchecked");
+
+            $.ajax({
+                //updateStatus
+                type: "post",
+                url: "https://remote.local.cedcommerce.com/hubspotremote/webhook/updateStatus?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ",
+                data: {
+                    "id": id,
+                    "status": false
+                },
+                success: function(response) {
+                    console.log(response);
+                }
+            });
+
+        }
+    });
+</script>
+
+</html>
