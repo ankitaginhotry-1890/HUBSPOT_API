@@ -4,29 +4,32 @@ namespace App\Hubspotremote\Controllers;
 
 use App\Connector\Components\Helper;
 use AWS\CRT\HTTP\Response;
+use Aws\Pricing\PricingClient;
 use Type;
 
 class AssoController extends \App\Core\Controllers\BaseController
 {
+    //General Function of Common Purpose
+    ///--------------------------------------------------------Code Optimization--------------------------------///
 
-    //Genral Function of Common Purpose
-    ///--------------------------------------------------------Code Optiomisation--------------------------------///
-
+    public function indexAction()
+    {
+        echo "hello";
+    }
     //Create Association with Object
     public function createAssociationWithObjectAction()
     {
         if ($this->request->getPost('primaryObject')) {
-            // return "Sucessfull";
-            $primaryObject = $this->request->getPost('primaryObject');
-            $primaryObjectID = $this->request->getPost('primaryObjectID');
-            $AssoObjectID = $this->request->getPost('associatedObjectID');
-            $AsssObject_type = $this->request->getPost('associatedObjectType');
-            $associationType = $this->request->getPost('associationType');
-            $helper = new HelperController();
-            $response = $helper->curlPut("crm/v3/objects/" . $primaryObject . "/" . $primaryObjectID . "/associations/" . $AsssObject_type . "/" . $AssoObjectID . "/" . $associationType . "");
+            $data = $this->request->getPost();
+            $primaryObject = $data['primaryObject'];
+            $primaryObjectID = $data['primaryObjectID'];
+            $AssoObjectID = $data['associatedObjectID'];
+            $AsssObject_type = $data['associatedObjectType'];
+            $associationType = $data['associationType'];
+            $response = $this->hubspot->crm()->objects()->associationsApi()->create($primaryObject, $primaryObjectID, $AsssObject_type, $AssoObjectID, $associationType);
             return json_encode($response, true);
         } else {
-            return "Association unsucessfull";
+            return "Association unsuccessfully";
         }
     }
 
@@ -34,14 +37,12 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function removeAssociationWithObjectAction()
     {
         if ($this->request->getPost('primaryObject')) {
-            // return "Sucessfull";
             $primaryObject = $this->request->getPost('primaryObject');
             $primaryObjectID = $this->request->getPost('primaryObjectID');
             $AssoObjectID = $this->request->getPost('associatedObjectID');
             $AsssObject_type = $this->request->getPost('associatedObjectType');
             $associationType = $this->request->getPost('associationType');
-            $helper = new HelperController();
-            $response = $helper->curlDelete("crm/v3/objects/" . $primaryObject . "/" . $primaryObjectID . "/associations/" . $AsssObject_type . "/" . $AssoObjectID . "/" . $associationType . "");
+            $response = $this->hubspot->crm()->objects()->associationsApi()->archive($primaryObject, $primaryObjectID, $AsssObject_type, $AssoObjectID, $associationType);
             return json_encode($response, true);
         } else {
             return "Association unsucessfull";
@@ -56,7 +57,7 @@ class AssoController extends \App\Core\Controllers\BaseController
             $primaryObject = $this->request->getPost('primaryObject');
             $primaryObjectID = $this->request->getPost('primaryObjectID');
             $toObjectType = $this->request->getPost('toObjectType');
-            $response = $helper->curlGet("crm/v3/objects/" . $primaryObject . "/" . $primaryObjectID . "/associations/" . $toObjectType . "?limit=500");
+            $response = $this->hubspot->crm()->objects()->associationsApi()->getAll($primaryObject, $primaryObjectID, $toObjectType, null, 500);
             return json_encode($response, true);
         }
     }
@@ -73,13 +74,11 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function dealAction()
     {
         $helper = new HelperController();
-        $dealData = $helper->curlGet('crm/v3/objects/deals?limit=10&archived=false');
-        echo "<pre>";
+        $dealData = json_decode($this->hubspot->crm()->deals()->basicApi()->getPage($limit = 100), true);
         $HtmlContainstr = "";
         foreach ($dealData['results'] as $key => $value) {
             $HtmlContainstr .= '<option value=' . $value['id'] . '>' . $value['properties']['dealname'] . '</option>';
         }
-        // die(print_r($dealData));
         $this->view->data = $HtmlContainstr;
     }
 
@@ -110,10 +109,10 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function contactDeatilsAction()
     {
         if ($this->request->getPost("contact_id")) {
-
             $Contact_id = $this->request->getPost("contact_id");
             $helper = new HelperController();
-            $ArrayData = $helper->curlGet("crm/v3/objects/contacts/" . $Contact_id);
+            // $ArrayData = $helper->curlGet("crm/v3/objects/contacts/" . $Contact_id);
+            $ArrayData = json_decode($this->hubspot->crm()->contacts()->basicApi()->getById($Contact_id), true);
             return json_encode($ArrayData, true);
         } else {
             return "data Invalid Please Provide a contact_id";
@@ -123,24 +122,21 @@ class AssoController extends \App\Core\Controllers\BaseController
     //contact Details
     public function contactDeailsAction()
     {
-        $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/contacts?limit=100&archived=false');
+        $contactData = json_decode($this->hubspot->crm()->contacts()->basicApi()->getPage($limit = 100), true);
         return json_encode($contactData, true);
     }
 
     //Deal Details
     public function DealDetailsAction()
     {
-        $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/deals?limit=10&archived=false');
+        $contactData = json_decode($this->hubspot->crm()->deals()->basicApi()->getPage($limit = 100), true);
         return $contactData;
     }
 
     //Companty Details
     public function companyDeatilsAction()
     {
-        $helper = new HelperController();
-        $ArrayData = $helper->curlGet("crm/v3/objects/companies?limit=100&archived=false");
+        $ArrayData = json_decode($this->hubspot->crm()->companies()->basicApi()->getPage($limit = 100), true);
         return json_encode($ArrayData);
     }
 
@@ -160,7 +156,8 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function listItemDataAction()
     {
         $helper = new HelperController();
-        $response = $helper->curlGet("crm/v3/objects/line_items?properties=name%2Chs_product_id%2Cquantity%2Cprice");
+        // $response = $helper->curlGet("crm/v3/objects/line_items?properties=name%2Chs_product_id%2Cquantity%2Cprice");
+        $response = json_decode($this->hubspot->crm()->lineItems()->basicApi()->getPage($limit = 100, null, "name,product_id,quantity,price"), true);
         $html = '';
         foreach ($response['results'] as $key => $value) {
             $html .= "
@@ -193,6 +190,7 @@ class AssoController extends \App\Core\Controllers\BaseController
     }
 
     //-----------------------------------------Custom Object Association---------------------------
+    //View Action
     public function customAssoAction()
     {
         if ($this->request->getPost()) {
@@ -215,7 +213,6 @@ class AssoController extends \App\Core\Controllers\BaseController
     public function removeAssoCustomObjAction()
     {
         if ($this->request->getPost()) {
-
             $objectTypeID = $this->request->getPost('objectType');
             $uniqueID = $this->request->getPost('id');
 

@@ -8,16 +8,13 @@ use App\Mymodule\Models\HubSpot_Token;
 use Phalcon\Http\Client\Provider\Curl;
 use Phalcon\Http\Response;
 
-
 class ConnectController extends \App\Core\Controllers\BaseController
 {
-
     public function indexAction()
     {
         // die("woking");
 
         if ($this->request->get('code')) {
-
             $helper = new HelperController();
             $CollectionData = $helper->fatchCollectionData();
             $flagg = count($helper->fatchCollectionData($CollectionData));
@@ -40,6 +37,7 @@ class ConnectController extends \App\Core\Controllers\BaseController
                 $table->token_type = $tokendata['token_type'];
                 $table->expire_time = date("H:i", strtotime('+30 minutes', $time));
                 $table->save();
+                $hubSpot = \HubSpot\Factory::createWithAccessToken($tokendata['access_token']);
 
                 curl_close($curl);
             } else {
@@ -56,6 +54,7 @@ class ConnectController extends \App\Core\Controllers\BaseController
                 $table->token_type = $tokendata['token_type'];
                 $table->expire_time = date("H:i", strtotime('+30 minutes', $time));
                 $table->save();
+                $hubSpot = \HubSpot\Factory::createWithAccessToken($tokendata['access_token']);
             }
         }
     }
@@ -63,14 +62,11 @@ class ConnectController extends \App\Core\Controllers\BaseController
     //This Function Just for Testing Purpose
     public function timeTestAction()
     {
-
         // return "funtion called";
-        echo "<pre>";
-        $helper = new HelperController();
-        $data = $helper->isTokenExpire();
-        print_r($data);
-        die;
+        // echo "<pre>";
+        // $helper = new HelperController();
+        // $data = $helper->isTokenExpire();
+        // print_r($data);
+        // die;
     }
-
-   
 }

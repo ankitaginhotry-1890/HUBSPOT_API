@@ -4,25 +4,14 @@ namespace App\Hubspotremote\Controllers;
 
 use Phalcon\Http\Response;
 
-
 class CompanyController extends \App\Core\Controllers\BaseController
 {
-
-    public function indexAction()
-    {
-    }
-
-    //Function to hit the enpoint of Company (Read)
-    //and for Listing  
+    //Function to hit the enpoint of Company (Read) and for Listing
     public function listAction()
     {
-        $helper = new HelperController();
-        $ArrayData = $helper->curlGet("crm/v3/objects/companies?limit=100&archived=false");
-        echo "<pre>";
+        $ArrayData = json_decode($this->hubspot->crm()->companies()->basicApi()->getPage($limit = 100), true);
         $html = "";
         foreach ($ArrayData['results'] as $key => $value) {
-            // print_r($value);
-            // die;
             $html .= "
             <tr'>
                 <form method='post'>
@@ -41,7 +30,7 @@ class CompanyController extends \App\Core\Controllers\BaseController
         //For Delete a Spacific Company Based on their Company ID
         if ($this->request->isPost('Did')) {
             $CompanyID = $this->request->getPost('Did');
-            $helper->curlDelete("crm/v3/objects/companies/" . $CompanyID);
+            $response = $this->hubspot->crm()->companies()->basicApi()->archive($CompanyID);
             $this->response->redirect('http://remote.local.cedcommerce.com/hubspotremote/company/list?bearer=' . BEARER . '');
         }
     }
@@ -51,8 +40,8 @@ class CompanyController extends \App\Core\Controllers\BaseController
     public function editAction()
     {
         $helper = new HelperController();
-
         $CompanyID = $this->request->getPost('Eid');
+        // $response = $this->hubspot->crm()->companies()->basicApi()->update($CompanyID);
         $arrayData = $helper->curlGet('crm/v3/objects/companies/' . $this->request->getPost('Eid') . '?archived=false');
         print_r($arrayData);
         die;
@@ -61,27 +50,21 @@ class CompanyController extends \App\Core\Controllers\BaseController
     //Function add a new company into Company Obejct of hubspot
     public function addAction()
     {
-        // die(print_r($this->request->getPost()));
-        $helper = new HelperController();
-
         if ($this->request->isPost('state')) {
+            $postData = [
 
-
-            $postData = array(
-                "properties" => array(
+                "properties" =>
+                [
                     "name" => '' . $this->request->getPost('companyName') . '',
                     "domain" => '' . $this->request->getPost('domain') . '',
                     "city" => '' . $this->request->getPost('city') . '',
                     "phone" => '' . $this->request->getPost('number') . '',
                     "state" => '' . $this->request->getPost('state') . '',
-
-                )
-            );
-
-            //Check Weather Company Added or not if Added Return the ID of Company to the view of action
-            $responseArray = $helper->curlPost("crm/v3/objects/companies", $postData);
-            if (isset($responseArray->id)) {
-                $this->view->flag = $responseArray->id;
+                ]
+            ];
+            $responseArray = json_decode($this->hubspot->crm()->companies()->basicApi()->create($postData), true);
+            if (isset($responseArray['id'])) {
+                $this->view->flag = $$responseArray['id'];
             } else {
                 die("Something went wrong! :( Company is not registered");
             }

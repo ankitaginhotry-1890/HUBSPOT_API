@@ -10,10 +10,8 @@ use App\Mymodule\Models\HubSpot_Token;
 use Phalcon\Http\Client\Provider\Curl;
 use Phalcon\Http\Response;
 
-
 class CardsController extends \App\Core\Controllers\BaseController
 {
-
     public function indexAction()
     {
     }
@@ -131,7 +129,6 @@ class CardsController extends \App\Core\Controllers\BaseController
 
     public function listingAction()
     {
-
         $helper = new HelperController();
         $response = $helper->curlGet("crm/v3/extensions/cards/971551", "d58bff24-1b67-49cf-9547-d6ab7233015f");
         echo "<pre>";

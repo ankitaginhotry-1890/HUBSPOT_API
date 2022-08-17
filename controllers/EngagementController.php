@@ -10,7 +10,6 @@ use ValueError;
 
 class EngagementController extends \App\Core\Controllers\BaseController
 {
-
     public function indexAction()
     {
         die("Engagement Controller");
@@ -21,9 +20,9 @@ class EngagementController extends \App\Core\Controllers\BaseController
         $objectType = "";
         if ($this->request->get('objectType') == 'contact') {
             $objectType = "contacts";
-        } else if ($this->request->get('objectType') == 'company') {
+        } elseif ($this->request->get('objectType') == 'company') {
             $objectType = "companies";
-        } else if ($this->request->get('objectType') == 'deal') {
+        } elseif ($this->request->get('objectType') == 'deal') {
             $objectType = "deals";
         }
 
@@ -37,7 +36,7 @@ class EngagementController extends \App\Core\Controllers\BaseController
             //*****************************NOTES LISTING**************************//
             $Notes = [];
             $helper = new HelperController();
-            $notesData = $helper->curlGet("crm/v3/objects/notes?limit=100&properties=hs_note_body&associations=" . $this->request->get('objectType') . "&archived=false");
+            $notesData = json_decode($this->hubspot->crm()->objects()->notes()->basicApi()->getPage(100, null, "hs_note_body", null, $this->request->get('objectType')), true);
             echo "<pre>";
             // print_r($notesData);
             // die;
@@ -49,7 +48,6 @@ class EngagementController extends \App\Core\Controllers\BaseController
                 // print_r($value);
                 // die;
                 if (isset($value['associations'])) {
-
                     if ($value['associations'][$objectType]['results'][0]['id'] == $user_id) {
                         $htm .= '
                             <div class="card mt-2 d-flex justify-content-center cardTASK ml-4" style="width: 15rem;">
@@ -59,18 +57,13 @@ class EngagementController extends \App\Core\Controllers\BaseController
                                 </div>
                                 <button value=' . $value['id'] . ' class="btn btn-outline-danger delBtn mr-4" style="border-color: transparent; color:white;">X</button> 
                         </div>';
-                        // echo $value['id'];
                     }
                 }
             }
 
-            // echo "Final";
-            // echo $htm;
-            // die;
             $owner_id = $helper->curlGet('owners/v2/owners')[0]['ownerId'];
             $this->view->owner_id = $owner_id;
             $this->view->notesHtml = $htm;
-            // die;
         }
 
         if ($this->request->getPost('id')) {
@@ -84,17 +77,10 @@ class EngagementController extends \App\Core\Controllers\BaseController
 
         //*****************************EMAIL LISTING**************************//
         $helper = new HelperController();
-        $emailsData = $helper->curlGet("crm/v3/objects/emails?limit=100&properties=hs_email_text%2Chs_email_subject%2Chs_email_to_email%2Chs_email_to_firstname&associations=" . $objectType . "&archived=false");
-
-
-        // print_r($emailsData);
+        $emailsData = json_decode($this->hubspot->crm()->objects()->emails()->basicApi()->getPage(100, null, "hs_email_text,hs_email_subject,email_to_email,email_to_firstname", null, $this->request->get('objectType')), true);
         $htm2 = '';
         foreach ($emailsData['results'] as $key => $value) {
-            //                 print_r($value);
-            // die;
-            // print_r($value['associations']['contacts']['results'][$b]);
             if (isset($value['associations'])) {
-                // print_r($value['associations']);
                 if ($value['associations'][$objectType]['results'][0]['id'] == $user_id) {
                     $htm2 .= '
                         <div class="row">
@@ -115,17 +101,9 @@ class EngagementController extends \App\Core\Controllers\BaseController
 
         //*****************************TASK LISTING**************************//
         $helper = new HelperController();
-        $tasksData = $helper->curlGet("crm/v3/objects/tasks?limit=100&properties=hs_task_body%2Chs_task_subject%2Chs_task_status%2Chs_task_priority%2Chs_timestamp&associations=" . $objectType . "&archived=false");
-
-        echo "crm/v3/objects/tasks?limit=100&properties=hs_task_body%2Chs_task_subject%2Chs_task_status%2Chs_task_priority%2Chs_timestamp&associations=" . $objectType . "&archived=false";
-
-        // print_r($tasksData);
-        // die;
+        $tasksData = json_decode($this->hubspot->crm()->objects()->tasks()->basicApi()->getPage(100, null, "hs_task_body,hs_task_subject,hs_task_status,hs_task_priority,hs_timestamp", null, $this->request->get('objectType')), true);
         $taskHTML = '';
         foreach ($tasksData['results'] as $key => $value) {
-            //                 print_r($value);
-            // die;
-            // print_r($value['associations']['contacts']['results'][$b]);
             if (isset($value['associations'])) {
                 print_r($value);
                 if ($value['associations'][$objectType]['results'][0]['id'] == $user_id) {
@@ -144,24 +122,14 @@ class EngagementController extends \App\Core\Controllers\BaseController
                 }
             }
         }
-        // echo $taskHTML;
-        // die;
         $this->view->taskhtml = $taskHTML;
 
-        //Meeting Listing 
+        //Meeting Listing
         //*****************************MEETING LISTING**************************//
         $helper = new HelperController();
         $meetingData = $helper->curlGet("crm/v3/objects/meetings?limit=100&properties=hs_meeting_title%2Chs_meeting_body%2Chs_internal_meeting_notes%2Chs_meeting_start_time%2Chs_meeting_end_time%2Chs_meeting_outcome&associations=" . $objectType . "&archived=false");
-
-        // echo "crm/v3/objects/tasks?limit=100&properties=hs_task_body%2Chs_task_subject%2Chs_task_status%2Chs_task_priority%2Chs_timestamp&associations=" . $objectType . "&archived=false";
-
-        // print_r($meetingData);
-        // die;
         $meetingHTML = '';
         foreach ($meetingData['results'] as $key => $value) {
-            //                 print_r($value);
-            // die;
-            // print_r($value['associations']['contacts']['results'][$b]);
             if (isset($value['associations'])) {
                 print_r($value);
                 if ($value['associations'][$objectType]['results'][0]['id'] == $user_id) {
@@ -179,28 +147,17 @@ class EngagementController extends \App\Core\Controllers\BaseController
                             <button class="btn btn-outline-danger delMeetingBTN" value=' . $value['id'] . ' style="border-color: transparent; color:white;">X</button>
                         </div>
                      </div>';
-                    // echo $value['id'];
                 }
             }
         }
-        // echo $taskHTML;
-        // die;
         $this->view->meetingHTML = $meetingHTML;
 
-        //Meeting Listing 
+        //Meeting Listing
         //*****************************Call LOG LISTING**************************//
         $helper = new HelperController();
-        $callData = $helper->curlGet("crm/v3/objects/calls?limit=100&properties=hs_call_title%2Chs_call_body%2Chs_call_duration%2Chs_call_from_number%2Chs_call_to_number%2Chs_call_recording_url%2hs_call_status&associations=" . $objectType . "&archived=false");
-
-        // echo "crm/v3/objects/tasks?limit=100&properties=hs_task_body%2Chs_task_subject%2Chs_task_status%2Chs_task_priority%2Chs_timestamp&associations=" . $objectType . "&archived=false";
-        echo "<h1>*********Call Logs Data*******</h1>";
-        print_r($callData);
-        // die;
+        $callData = json_decode($this->hubspot->crm()->objects()->calls()->basicApi()->getPage(100, null, "hs_call_title,hs_call_body,hs_call_duration,hs_call_from_number,hs_call_to_number,hs_call_recording_url,hs_call_status", null, $this->request->get('objectType')), true);
         $callHTML = '';
         foreach ($callData['results'] as $key => $value) {
-            //                 print_r($value);
-            // die;
-            // print_r($value['associations']['contacts']['results'][$b]);
             if (isset($value['associations'])) {
                 print_r($value);
                 if ($value['associations'][$objectType]['results'][0]['id'] == $user_id) {
@@ -217,12 +174,9 @@ class EngagementController extends \App\Core\Controllers\BaseController
                             <button class="btn btn-outline-danger delCallBTN" value=' . $value['id'] . ' style="border-color: transparent; color:white;">X</button>
                         </div>
                      </div>';
-                    // echo $value['id'];
                 }
             }
         }
-        // echo $taskHTML;
-        // die;
         $this->view->callHTML = $callHTML;
     }
 
@@ -232,11 +186,11 @@ class EngagementController extends \App\Core\Controllers\BaseController
         $objectType = "";
         if ($this->request->get('objectType') == 'contact') {
             $objectType = "contacts";
-        } else if ($this->request->get('objectType') == 'company') {
+        } elseif ($this->request->get('objectType') == 'company') {
             $objectType = "companies";
-        } else if ($this->request->get('objectType') == 'deal') {
+        } elseif ($this->request->get('objectType') == 'deal') {
             $objectType = "deals";
-        } else if ($this->request->get('objectType') == 'ticket') {
+        } elseif ($this->request->get('objectType') == 'ticket') {
             $objectType = "tickets";
         } else {
             $objectType = $this->request->get('objectType');
@@ -244,7 +198,7 @@ class EngagementController extends \App\Core\Controllers\BaseController
 
         if ($this->request->getPost()) {
             echo "<pre>";
-            print_r($this->request->getPost());
+            // print_r($this->request->getPost());
             $id = $this->request->getPost('id');
             $note = $this->request->getPost('note');
             $owner_id = $this->request->getPost('owner_id');
@@ -260,26 +214,16 @@ class EngagementController extends \App\Core\Controllers\BaseController
                 'hubspot_owner_id' => $owner_id
             ],];
             $response = $helper->curlPost('crm/v3/objects/notes', $arr);
-            $noteID = $response->id;
-
-
-            echo "crm/v3/objects/notes/' . $noteID . '/associations/' . $objectType . '/' . $id . '/note_to_'" . $this->request->get('objectType');
-
-            echo "<br><br>";
-            // echo "asdsd";
-
-            $finalResponse = $helper->curlPut('crm/v3/objects/notes/' . $noteID . '/associations/' . $objectType . '/' . $id . '/note_to_' . $this->request->get('objectType'));
+            $response = json_decode($this->hubspot->crm()->objects()->notes()->basicApi()->create($arr), true);
+            $noteID = $response['id'];
+            $finalResponse = json_decode($this->hubspot->crm()->objects()->notes()->associationsApi()->create($noteID, $objectType, $id, "note_to_" . $this->request->get('objectType')), true);
             $this->view->result = "success";
-            print_r($finalResponse);
-            // print_r("crm/v3/objects/notes/' . $noteID . '/associations/' . $objectType . '/' . $id . '/note_to_' . $this->request->get('objectType'");
-            // die;
         }
     }
 
     //-------------------------------Task Action--------------------------------//0
     public function createtaskAction()
     {
-        // die("Sda");
         if ($this->request->getPost()) {
             echo "<pre>";
             print_r($this->request->getPost());
@@ -301,36 +245,32 @@ class EngagementController extends \App\Core\Controllers\BaseController
 
             print_r($postData);
             $helper = new HelperController();
-            $response = $helper->curlPost("crm/v3/objects/tasks", $postData);
+            // $response = $helper->curlPost("crm/v3/objects/tasks", $postData);
+            $response = json_decode($this->hubspot->crm()->objects()->tasks()->basicApi()->create($postData), true);
+
             echo "<h3>Response</h3>";
             print_r($response);
 
-            //Associate With Object
-            $assoObjecttoTask = $helper->curlPut("crm/v3/objects/tasks/" . $response->id . "/associations/" . $this->request->getPost('objectType') . "/" . $this->request->getPost('id') . "/task_to_" . $this->request->getPost('objectType'));
-            echo "<h3>Association</h3>";
+            echo "\n<h3>Association</h3>\n";
+            $assoObjecttoTask = json_decode($this->hubspot->crm()->objects()->tasks()->associationsApi()->create($response['id'], $this->request->getPost('objectType'), $this->request->getPost('id'), "task_to_" . $this->request->get('objectType')), true);
             print_r($assoObjecttoTask);
         }
-        // die;
     }
 
 
     //-------------------------------Meeting EndPoint--------------------------------//0
     public function createMeetingAction()
     {
-
         if ($this->request->getPost()) {
             echo "<pre>";
-            print_r($this->request->getPost());
 
             $t = time();
             $date_time = date("Y-m-d h:m:s", $t);
             $timestamp = (str_replace('+00:00', '.000Z', gmdate('c', strtotime($date_time))));
-
-
             $arr = [
                 'properties' => [
                     'hs_timestamp' => $timestamp,
-                    'hubspot_owner_id' => '11349275740',
+                    'hubspot_owner_id' => $this->request->getPost('owner_id'),
                     'hs_meeting_title' => $this->request->getPost('title'),
                     'hs_meeting_body' => $this->request->getPost('title'),
                     'hs_internal_meeting_notes' => $this->request->getPost('title'),
@@ -343,17 +283,19 @@ class EngagementController extends \App\Core\Controllers\BaseController
             ];
 
             $helper = new HelperController();
-            $response = $helper->curlPost("crm/v3/objects/meetings", $arr);
+            $response = json_decode($this->hubspot->crm()->objects()->meetings()->basicApi()->create($arr), true);
+
             print_r($response);
+            // $assoObjecttoMeeting = $helper->curlPut("crm/v3/objects/meetings/" . $response->id . "/associations/" . $this->request->getPost('objectType') . "/" . $this->request->getPost('id') . "/meeting_event_to_" . $this->request->getPost('objectType'));
 
-            $assoObjecttoTask = $helper->curlPut("crm/v3/objects/meetings/" . $response->id . "/associations/" . $this->request->getPost('objectType') . "/" . $this->request->getPost('id') . "/meeting_event_to_" . $this->request->getPost('objectType'));
+            $assoObjecttoMeeting = json_decode($this->hubspot->crm()->objects()->meetings()->associationsApi()->create($response['id'], $this->request->getPost('objectType'), $this->request->getPost('id'), "meeting_event_to_" . $this->request->get('objectType')), true);
+
             echo "<h3>Association</h3>";
-            print_r($assoObjecttoTask);
+            print_r($assoObjecttoMeeting);
 
-            echo "crm/v3/objects/meetings/" . $response->id . "/associations/" . $this->request->getPost('objectType') . "/" . $this->request->getPost('id') . "/meeting_event_to_" . $this->request->getPost('objectType');
             echo "<h3>Association</h3>";
             // print_r($response);
-            if (isset($response->id)) {
+            if (isset($response['id'])) {
                 $this->view->msg = "*Meeting Created";
             }
             // die;
@@ -398,11 +340,11 @@ class EngagementController extends \App\Core\Controllers\BaseController
                 'hs_email_headers' => serialize($hs_email_headers)
             ],];
 
-            $helper = new HelperController();
-            $response = $helper->curlPost("crm/v3/objects/emails", $data);
-            $assoResponse = $helper->curlPut('crm/v3/objects/emails/' . $response->id . '/associations/' . $this->request->getPost('objectType') . '/' . $this->request->getPost('id') . '/email_to_' . $this->request->getPost('objectType'));
-            print_r($assoResponse);
-            die;
+            //Create Email
+            $response = json_decode($this->hubspot->crm()->objects()->emails()->basicApi()->create($data), true);
+            //Associate with Object
+            $assoResponse = json_decode($this->hubspot->crm()->objects()->emails()->associationsApi()->create($response['id'], $this->request->getPost('objectType'), $this->request->getPost('id'), "email_to_" . $this->request->get('objectType')), true);
+
             if (isset($assoResponse['id'])) {
                 $this->view->msg = "success";
             }
@@ -415,22 +357,18 @@ class EngagementController extends \App\Core\Controllers\BaseController
     {
         if ($this->request->isPost()) {
             $id = $this->request->getPost('Did');
-            $helper = new HelperController();
-            $response = $helper->curlDelete("crm/v3/objects/notes/" . $id);
-            // $this->request->respon
-            // return json_encode($response, true);
+            $response = json_decode($this->hubspot->crm()->objects()->notes()->basicApi()->archive($id), true);
         }
     }
 
 
-    //**********Delete Emails 
+    //**********Delete Emails
 
     public function delEmailsAction()
     {
         if ($this->request->getPost()) {
             $id = $this->request->getPost("id");
-            $helper = new HelperController();
-            $response = $helper->curlDelete('crm/v3/objects/emails/' . $id);
+            $response = json_decode($this->hubspot->crm()->objects()->emails()->basicApi()->archive($id), true);
             return $response;
         }
     }
@@ -443,6 +381,7 @@ class EngagementController extends \App\Core\Controllers\BaseController
             $EngagementType = $this->request->getPost("EngagementType");
             $helper = new HelperController();
             $response = $helper->curlDelete('crm/v3/objects/' . $EngagementType . '/' . $id);
+            // $response = json_decode($this->hubspot->crm()->objects()->emails()->basicApi()->archive($id), true);
             return $response;
         }
     }
@@ -453,9 +392,9 @@ class EngagementController extends \App\Core\Controllers\BaseController
         $objectType = "";
         if ($this->request->get('objectType') == 'contact') {
             $objectType = "contacts";
-        } else if ($this->request->get('objectType') == 'company') {
+        } elseif ($this->request->get('objectType') == 'company') {
             $objectType = "companies";
-        } else if ($this->request->get('objectType') == 'deal') {
+        } elseif ($this->request->get('objectType') == 'deal') {
             $objectType = "deals";
         }
 
@@ -482,26 +421,15 @@ class EngagementController extends \App\Core\Controllers\BaseController
                 ],
             ];
 
-            print_r($postData);
-            $helper = new HelperController();
-            $response = $helper->curlPost('crm/v3/objects/calls', $postData);
+            $response = json_decode($this->hubspot->crm()->objects()->calls()->basicApi()->create($postData), true);
 
-            echo "<h1>Response</h1>";
-            print_r($response);
-
-
-            $assoResponse = $helper->curlPut("crm/v3/objects/calls/$response->id/associations/" . $objectType . "/" . $this->request->getPost('id') . "/call_to_" . $this->request->getPost('objectType') . "");
-            echo "<h1>Association Response</h1>";
-            echo "crm/v3/objects/calls/$response->id/associations/" . $objectType . "/" . $this->request->getPost('id') . "/call_to_" . $this->request->getPost('objectType') . "";
-            print_r($assoResponse['id']);
+            $assoResponse = json_decode($this->hubspot->crm()->objects()->calls()->associationsApi()->create($response['id'], $this->request->getPost('objectType'), $this->request->getPost('id'), "call_to_" . $this->request->get('objectType')), true);
 
             if (isset($assoResponse['id'])) {
                 $this->view->msg = "Call Log Successully";
             } else {
                 $this->view->msg = "Something Went Wrong";
             }
-
-
             // die;
         }
     }

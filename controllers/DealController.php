@@ -6,19 +6,18 @@ use OAuth\OAuth1\Service\Tumblr;
 use Phalcon\Http\Client\Provider\Curl;
 use Phalcon\Http\Response;
 
-
 class DealController extends \App\Core\Controllers\BaseController
 {
-
     public function indexAction()
     {
         die("deal");
     }
 
+    //Data
     public function listAction()
     {
         $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/deals?limit=10&archived=false');
+        $contactData = json_decode($this->hubspot->crm()->deals()->basicApi()->getPage($limit = 100), true);
 
         // print_r($contactData);
         $html = "";
@@ -50,9 +49,7 @@ class DealController extends \App\Core\Controllers\BaseController
         // die;
 
         if ($this->request->getPost('Did')) {
-            // die(print_r($this->request->getPost('Did')));
-            $helper = new HelperController();
-            $helper->curlDelete("crm/v3/objects/deals/" . $this->request->getPost('Did'));
+            $this->hubspot->crm()->deals()->basicApi()->archive($this->request->getPost('Did'));
             $this->response->redirect('hubspotremote/deal/list?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ');
         }
     }
@@ -71,12 +68,11 @@ class DealController extends \App\Core\Controllers\BaseController
             return "Deleted";
         }
     }
+
     public function addAction()
     {
         if ($this->request->getPost()) {
-
-            print_r($this->request->getPost());
-            // die;
+            echo "<pre>";
             $postData = [
                 'properties' => [
                     'amount'            => $this->request->getPost('amount'),
@@ -84,17 +80,14 @@ class DealController extends \App\Core\Controllers\BaseController
                     'dealname'          => $this->request->getPost('dealname'),
                     'dealstage'         => $this->request->getPost('dealstage'),
                     'hubspot_owner_id'  => 201118343,
-                    'pipeline'          => $this->request->getPost('pipeline')
-                ],
+                    'pipeline'          => "default"
+                ]
             ];
+            print_r($postData);
+            $response = json_decode($this->hubspot->crm()->deals()->basicApi()->create($postData), true);
 
-            $helper = new HelperController();
-            // $response=$helper->curlGet("owners/v2/owners");
-            $response = $helper->curlPost("crm/v3/objects/deals", $postData);
-            echo "<pre>";
             if (isset($response->id)) {
-                $this->view->flag = $response->properties->properties;
-                // print_r($response);
+                $this->view->flag = $response['id'];
             } else {
             }
         }
@@ -106,16 +99,13 @@ class DealController extends \App\Core\Controllers\BaseController
         if ($this->request->get('dealID')) {
             $dealID = $this->request->get('dealID');
             $response = $helper->curlGet("crm/v3/objects/deals/" . $dealID . "?archived=false");
-            // echo "<pre>";
-            // print_r($helper->curlGet('owners/v2/owners'));
-            // die;
+            $response = json_decode($this->hubspot->crm()->deals()->basicApi()->getById($dealID), true);
             $this->view->data = $response;
         } else {
             die("Something went wrong :(");
         }
 
         if ($this->request->getPost('id')) {
-
             $postData = [
                 "properties" => [
                     'amount' => $this->request->getPost('amount'),
@@ -126,38 +116,12 @@ class DealController extends \App\Core\Controllers\BaseController
                 ]
             ];
             $id = $this->request->getPost('id');
-
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.hubapi.com/crm/v3/objects/deals/' . $id . '?hapikey=1b1ebd50-22c2-4174-bb58-ba6ff2f7c95a',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'PATCH',
-                CURLOPT_POSTFIELDS => json_encode($postData),
-                CURLOPT_HTTPHEADER => array(
-                    'content-type: application/json'
-                ),
-            ));
-
-            $response = curl_exec($curl);
-            $response2 = json_decode($response, true);
-            $flag = '';
-            if (isset($response2['id'])) {
-                // $this->view->flag = true;
+            $response = json_decode($this->hubspot->crm()->deals()->basicApi()->update($id, $postData), true);
+            if (isset($response['id'])) {
                 $this->response->redirect('https://remote.local.cedcommerce.com/hubspotremote/deal/list?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ&dealID=9458346917');
             } else {
-                $this->view->flag = false;
                 die("Something Went Wrong");
             }
-            // echo "<pre>";
-            // die(print_r($response2['id']));
-            // print_r($response);
-            // die;
         }
     }
 }

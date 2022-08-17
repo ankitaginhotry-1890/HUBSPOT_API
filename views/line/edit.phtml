@@ -95,12 +95,14 @@
         $('#saveBtn').click(function(e) {
             e.preventDefault();
 
-            var productval=$("#products").val();
-            var productInfo=productval.split(",");
-            var product_id=productInfo[0];
-            var product_name=productInfo[1];
+            var productval = $("#products").val();
+            var productInfo = productval.split(",");
+            var product_id = productInfo[0];
+            var product_name = productInfo[1];
             var amount = $('.amt').val();
             var quantity = $('.qty').val();
+            console.log("\n");
+            console.log(product_id, product_name, amount, quantity);
 
             $.ajax({
                 type: "post",
@@ -115,7 +117,6 @@
                     console.log(response);
                 }
             });
-            console.log(product_id,product_name, amount, quantity);
         });
     });
 </script>

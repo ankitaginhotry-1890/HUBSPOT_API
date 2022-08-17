@@ -6,7 +6,6 @@ use App\Hubspotremote\Models\HubSpot_Token;
 
 class HelperController extends \App\Core\Controllers\BaseController
 {
-
     public function test()
     {
         die("helper");
@@ -63,7 +62,6 @@ class HelperController extends \App\Core\Controllers\BaseController
         $curl = curl_init();
 
         if ($hapikey == '') {
-
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.hubapi.com/' . $path,
                 CURLOPT_RETURNTRANSFER => true,
@@ -149,22 +147,21 @@ class HelperController extends \App\Core\Controllers\BaseController
     //$postData (Array)
     public function curlPatch($path, $postData, $hapikey = '')
     {
-
         $CollectionData = $this->fatchCollectionData();
         $returnData = $this->refreshAccess_token($CollectionData);
         if ($returnData === "Expire") {
             $CollectionData = $this->fatchCollectionData();
         }
-        
+
         $curl = curl_init();
         // $CURLOPT_URL = 'https://api.hubapi.com/' . $path;
         // // die($CollectionData[0]['access_token']);
         // // die(json_encode($postData));
-        
+
         if ($hapikey !== "") {
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.hubapi.com/' . $path . "/?hapikey=" . $hapikey,
-                
+
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -180,7 +177,7 @@ class HelperController extends \App\Core\Controllers\BaseController
         } else {
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.hubapi.com/' . $path,
-                
+
                 CURLOPT_RETURNTRANSFER => true,
                 CURLOPT_ENCODING => '',
                 CURLOPT_MAXREDIRS => 10,
@@ -195,10 +192,9 @@ class HelperController extends \App\Core\Controllers\BaseController
                 ),
             ));
         }
-        
-        
+
+
         $response = curl_exec($curl);
-        return json_decode($response);
     }
 
     //For Put Request curl Fucntion/////////////////////////
@@ -257,7 +253,6 @@ class HelperController extends \App\Core\Controllers\BaseController
 
     public function isTokenExpire($CollectionData)
     {
-
         $object_id = json_decode(json_encode($CollectionData[0]['_id'], true), true)['$oid'];
         $table = new HubSpot_Token();
         $container = $table->getCollectionForTable(false);
@@ -278,8 +273,6 @@ class HelperController extends \App\Core\Controllers\BaseController
     public function refreshAccess_token($CollectionData)
     {
         if ($this->isTokenExpire($CollectionData) == "Expire") {
-
-
             $refreshToken = $CollectionData[0]['refresh_token'];
 
             //curl Request to get Access token from refresh token
@@ -319,6 +312,8 @@ class HelperController extends \App\Core\Controllers\BaseController
             $table->token_type = $tokendata['token_type'];
             $table->expire_time = date("H:i", strtotime('+30 minutes', $time));
             $table->save();
+            // $hubSpot = \HubSpot\Factory::createWithAccessToken($tokendata['access_token']);
+
 
             return "Expire";
         } else {
@@ -333,7 +328,6 @@ class HelperController extends \App\Core\Controllers\BaseController
     //Fucntion to fatch the collection data
     public function fatchCollectionData()
     {
-
         $table = new HubSpot_Token();
         $container = $table->getCollectionForTable(false);
         $dbData = $container->find()->ToArray();

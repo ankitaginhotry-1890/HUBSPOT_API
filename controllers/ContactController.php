@@ -5,26 +5,18 @@ namespace App\Hubspotremote\Controllers;
 use Phalcon\Http\Client\Provider\Curl;
 use Phalcon\Http\Response;
 
-
 class ContactController extends \App\Core\Controllers\BaseController
 {
-
     public function indexAction()
     {
+        echo "Working..";
     }
 
     public function listAction()
     {
-        $helper = new HelperController();
-        $contactData = $helper->curlGet('crm/v3/objects/contacts?limit=100&archived=false');
-        // echo "<pre>";
-        // die(print_r($contactData));
-
+        $contactData = json_decode($this->hubspot->crm()->contacts()->basicApi()->getPage($limit = 100), true);
         $html = "";
         foreach ($contactData['results'] as $key => $value) {
-            // echo "<pre>";
-            // print_r($value);
-            // die;
             $html .= "
             <tr'>
                 <form method='post'>
@@ -46,24 +38,22 @@ class ContactController extends \App\Core\Controllers\BaseController
         $this->view->data = $html;
 
 
-        // Delete A Spacific Contact 
-        if ($this->request->isPost()) {
-
+        // Delete A Spacific Contact
+        if ($this->request->isPost("Did")) {
+            $helper = new HelperController();
             $delID = $this->request->getPost("Did");
-            $response = $helper->curlDelete("crm/v3/objects/contacts/" . $delID);
+            $this->hubspot->crm()->contacts()->basicApi()->archive($delID);
             $this->response->redirect("http://remote.local.cedcommerce.com/hubspotremote/contact/list?bearer=" . BEARER . "");
         }
     }
 
-
-    // Function for added a contact into hubspot Contact Object.
+    /**
+    Function for added a contact into hubspot Contact Object.
+     * @return void
+     */
     public function addAction()
     {
-        $helper = new HelperController();
-
         if ($this->request->isPost()) {
-
-
             $formData = array(
                 'properties' =>
                 array(
@@ -74,22 +64,23 @@ class ContactController extends \App\Core\Controllers\BaseController
                     'phone' => '' . $this->request->getPost('number') . '',
                 ),
             );
-            //post request of Curl
-            $responseArray = $helper->curlPost('crm/v3/objects/contacts', $formData);
-            //for display the added Contact ID
-            // print_r($responseArray->id);
-            // die;
-            if (isset($responseArray->id)) {
-                $this->view->flag = $responseArray->id;
+            $response = json_decode($this->hubspot->crm()->contacts()->basicApi()->create($formData), true);
+            if (isset($response['id'])) {
+                $this->view->flag = $response['id'];
             }
         }
     }
 
-    //Function for Edit the Conatct Details
+    /**
+     Function for Edit the Conatct Details
+     *
+     *
+     * @return void
+     */
     public function editAction()
     {
-        $helper = new HelperController();
 
+        //fatch the value of contact and send to the view which is display in Edit form field.
         if ($this->request->getPost('lastname')) {
             $Formdata = array(
                 "properties" => array(
@@ -100,18 +91,20 @@ class ContactController extends \App\Core\Controllers\BaseController
                 )
             );
             $ContactID = $this->request->getPost('id');
-            $responseArray = $helper->curlPatch("crm/v3/objects/contacts/" . $ContactID, $Formdata);
-            // die(print_r($responseArray));
-            if (isset($responseArray->id)) {
-                $this->response->redirect("http://remote.local.cedcommerce.com/hubspotremote/contact/list?bearer=" . BEARER . "");
+            $response = $this->hubspot->crm()->contacts()->basicApi()->update($ContactID, $Formdata);
+            if (isset($response['id'])) {
+                die("<h1><b>Contact Successfully Updated</b></h1>\n<a href='http://remote.local.cedcommerce.com/hubspotremote/contact/list?bearer=" . BEARER . "'>Go to Listing Page</a>");
+            } else {
+                die("Something Went Wrong!");
             }
-            //  else {
-            //     die("Something Went Wrong!");
-            // }
         }
 
-        //fatch the value of contact and send to the view which is display in Edit form field. 
-        $arrayData = $helper->curlGet("crm/v3/objects/contacts/" . $this->request->getPost('Eid') . "");
-        $this->view->data = $arrayData;
+        $EditID = $this->request->getPost("Eid");
+        if (isset($EditID)) {
+            $contactData = json_decode(json_encode($this->hubspot->crm()->contacts()->basicApi()->getByIdWithHttpInfo($EditID), true), true);
+            $this->view->data = $contactData[0];
+        } else {
+            die("Error 101: Requried Post Data not Get");
+        }
     }
 }

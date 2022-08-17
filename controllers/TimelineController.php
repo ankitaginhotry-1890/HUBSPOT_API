@@ -51,8 +51,6 @@ class TimelineController extends \App\Core\Controllers\BaseController
     public function createTemplateAction()
     {
         if ($this->request->getPost()) {
-
-
             $helper = new HelperController();
             $response = $helper->curlPost("crm/v3/timeline/" . APPID . "/event-templates", $this->request->getPost("PostData"), DEVAPIKEY);
             // return json_encode($this->request->getPost("PostData"), true);
@@ -131,7 +129,6 @@ class TimelineController extends \App\Core\Controllers\BaseController
             foreach ($templateData['tokens'] as $key => $value) {
                 // print_r($value);
                 if ($value['type'] == "string") {
-
                     $html .= '<div class="form-group"><label>' . $value['label'] . '</label><input type="text" class="form-control" name=' . $value['name'] . ' placeholder=' . $value['name'] . ' value="" /></div><br>';
                 } else {
                     $html .= ' <div class="form-group"><label>' . $value['label'] . '</label><input type=' . $value['type'] . ' name=""class="form-control" name=' . $value['name'] . ' placeholder=' . $value['name'] . '></div><br>';

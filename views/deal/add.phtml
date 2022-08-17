@@ -22,7 +22,7 @@
     if (isset($flag)) {
 
         echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Contact Registered</strong> One Contact is Sucessfully Registered! Contact ID = '.$flag.'
+        <strong>Contact Registered</strong> One Contact is Sucessfully Registered! Contact ID = ' . $flag . '
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
         </button>
@@ -35,43 +35,42 @@
         <div class="card px-1 py-4">
             <form action="" method="POST">
                 <div class="card-body" style="padding: 30px;">
-                    <h6 class="card-title mb-3 text-center">Enter Contact Details</h6>
+                    <h6 class="card-title mb-3 text-center">Enter Deal Details</h6>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <!-- <label for="name">Name</label> --> <input class="form-control" type="text" name="firstname" placeholder="Firstname" required>
+                                <!-- <label for="name">Name</label> --> <input class="form-control" type="text" name="dealname" placeholder="Deal Name" required>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="lastname" placeholder="Lastname" required> </div>
+                                <div class="input-group"> <input class="form-control" type="number" name="amount" placeholder="Deal Amount" required> </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="email" placeholder="Email ID" required> </div>
+                                <div class="input-group"> <input class="form-control" type="datetime-local" name="closedate" placeholder="Close Date" required> </div>
                             </div>
                         </div>
                     </div>
+
                     <div class="row">
                         <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="text" name="company" placeholder="Company Name" required> </div>
-                            </div>
+                            <select class="form-select" name="dealstage" aria-label="Default select example">
+                                <option selected disabled>Choose Deal Stage</option>
+                                <option value="presentationscheduled">Presentationscheduled</option>
+                                <option value="contractsent">Contract Sent</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <div class="input-group"> <input class="form-control" type="number" name="number" placeholder="Phone no" required> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary btn-block confirm-button">Add Contact</button>
+
+                    <input type="hidden" name="pipeline" value="default">
+
+                    <button class="btn btn-primary btn-block confirm-button mt-3">Add Contact</button>
                 </div>
             </form>
         </div>
@@ -79,7 +78,7 @@
     </div>
 
 
-    
+
 </body>
 
 </html>

@@ -25,14 +25,10 @@ class WebhookController extends \App\Core\Controllers\BaseController
         $helper = new HelperController();
 
         if ($this->request->getPost("dID")) {
-            $response = $helper->curlDelete("webhooks/v3/" . APPID . "/subscriptions/" . $this->request->getPost("dID"), DEVAPIKEY);
-            // die($this->request->getPost("dID"));
-
+            $response = $this->hubspotDevAPI->webhooks()->settings()->subscriptionsApi()->archive($this->request->getPost("dID"), APPID);
         }
 
-        $response = $helper->curlGet("webhooks/v3/" . APPID . "/subscriptions", DEVAPIKEY);
-        echo "<pre>";
-        // print_r($response);
+        $response = json_decode($this->hubspotDevAPI->webhooks()->subscriptionsApi()->getAll(APPID), true);
         $htm = "";
         foreach ($response['results'] as $key => $value) {
             $newResponse = $helper->curlGet("webhooks/v3/" . APPID . "/subscriptions/" . $value['id'], DEVAPIKEY);
@@ -51,7 +47,6 @@ class WebhookController extends \App\Core\Controllers\BaseController
                   <td><form method="post"><button class="btn btn-outline-danger" name="dID" value=' . $newResponse['id'] . '>Delete</button></form></td>
                   </tr>';
             } else {
-
                 $htm .= '<tr>
                     <th class="text-dark">' . $data[0] . '</th>
                     <th class="text-dark">' . $data[1] . '</th>
@@ -66,8 +61,11 @@ class WebhookController extends \App\Core\Controllers\BaseController
         }
 
         $res = $helper->curlGet("webhooks/v3/971551/settings", DEVAPIKEY);
-        // print_r($res['targetUrl']);
-
+        // $res = json_decode($this->hubspotOauth->webhooks()->settings()->settingsApi()->getAll(APPID), true);
+        // echo '<pre>';
+        // print_r($res);
+        // echo '<br><br><b>';
+        // die(__FILE__.'/line '.__LINE__);
         $this->view->targetUrl = $res['targetUrl'];
         $this->view->tableData = $htm;
         // die;
@@ -101,6 +99,7 @@ class WebhookController extends \App\Core\Controllers\BaseController
             ));
             $response = curl_exec($curl);
             print_r($response);
+            die;
             $this->response->redirect("https://remote.local.cedcommerce.com/hubspotremote/webhook/createwebhook?bearer=eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJ1c2VyX2lkIjoiNjI2YmNjMzc2NzM0MTkzZmQ0NTA0MWI5Iiwicm9sZSI6ImFkbWluIiwiZXhwIjoxNjg4NjM2MTE1LCJpc3MiOiJodHRwczpcL1wvYXBwcy5jZWRjb21tZXJjZS5jb20iLCJ0b2tlbl9pZCI6IjYyYzU1NzUzODBjMDYwNTA5MjA2MTVjMiJ9.i45WyHgJ3b11ntGWMGuiNMUri6ezbnALFpFoZkhS2KHGbNA0xge2R6AR-Dsd1U-Gdcv5E9nrQKa3sEh_k7SGA_V4_FGAmFuJUQ5lrLoFpj9oaCc0qSb5A7hf3TY592SozFp-jKRxPlVSWqLhFghWTvcVLV-S_8VfhtSkbretnDY00MCJFaZmTboZkv-FYwHUQM2u1GNsYQAegXL8lHDtz3d9vw1d_t24eZYcvlBlAU1gRQyJQNqaqVThgGdHEvqmyYB2iEsk3LgI8rcxdBEBFYHFJMCfL05BlZ6Ht55d0d5gku-_tGK9cnPz2EVDfQ9OlaQmTrxl2zkTC6Z4G56zIQ");
             // die;
         }
@@ -109,7 +108,6 @@ class WebhookController extends \App\Core\Controllers\BaseController
     public function updateStatusAction()
     {
         if ($this->request->isPost()) {
-
             $helper = new HelperController();
             $data = $this->request->getPost();
             $status = [
